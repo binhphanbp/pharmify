@@ -9,7 +9,7 @@ import { CartService } from '../../../core/services/cart.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.scss']
+  styleUrls: ['./product-card.component.scss'],
 })
 export class ProductCardComponent {
   @Input({ required: true }) product!: Product;
@@ -19,12 +19,21 @@ export class ProductCardComponent {
   addToCart(event: Event) {
     event.preventDefault();
     event.stopPropagation();
-    // Use a default unit id if single unit, here we assume product base unit mapping or just use a mock unit for now
-    this.cartService.addToCart(this.product.id, 'default-unit-id');
+    if (this.product.base_unit_id) {
+      this.cartService.addToCart(this.product.id, this.product.base_unit_id);
+    }
   }
 
   get discountPercent(): number {
-    if (!this.product.original_price || this.product.original_price <= this.product.price) return 0;
-    return Math.round(((this.product.original_price - this.product.price) / this.product.original_price) * 100);
+    if (
+      !this.product.original_price ||
+      this.product.original_price <= this.product.price
+    )
+      return 0;
+    return Math.round(
+      ((this.product.original_price - this.product.price) /
+        this.product.original_price) *
+        100,
+    );
   }
 }

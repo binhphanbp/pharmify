@@ -1,0 +1,47 @@
+@import "../products/products.component.scss";
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.brand-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s;
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.brand-logo {
+  width: 80px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #f5f5f5;
+  padding: 4px;
+}
+
+.brand-info {
+  flex: 1;
+  strong {
+    display: block;
+    font-size: 15px;
+  }
+  small {
+    color: #8c8c8c;
+    font-size: 12px;
+  }
+}
+
+.brand-actions {
+  display: flex;
+  gap: 4px;
+}

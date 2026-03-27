@@ -1,56 +1,78 @@
 <header class="header">
-  <!-- Utility Bar (White, like Pharmacity) -->
+  <!-- Top Promo Bar -->
+  <div class="promo-bar">
+    <div class="container promo-container">
+      <div class="promo-content">
+        <span class="promo-logo">NHÀ THUỐC</span>
+        <span class="promo-brand">Pharmify</span>
+        <span class="promo-divider">|</span>
+        <span class="promo-text">MIỄN PHÍ VẬN CHUYỂN</span>
+        <span class="promo-highlight">CHO MỌI ĐƠN HÀNG TỪ 0Đ</span>
+        <a routerLink="/" class="promo-cta">MUA NGAY ➤</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Utility Bar -->
   <div class="utility-bar">
     <div class="container d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center gap-3">
         <a href="#" class="utility-link">
           <span class="material-icons">phone_iphone</span> Tải ứng dụng
         </a>
-        <span class="utility-divider">|</span>
-        <a href="#" class="utility-link">
-          <span class="material-icons">local_hospital</span> Hệ thống nhà thuốc
+        <span class="utility-sep">|</span>
+        <a href="tel:18006821" class="utility-link hotline-link">
+          <span class="material-icons">headset_mic</span> Hotline 1800 6821
         </a>
       </div>
       <div class="d-flex align-items-center gap-3">
+        <a href="#" class="utility-link deal-link">
+          <span class="material-icons">local_fire_department</span> Deal hot
+          tháng 03 🔥
+        </a>
+        <span class="utility-sep">|</span>
+        <a href="#" class="utility-link">
+          <span class="material-icons">receipt_long</span> Tra cứu đơn hàng
+        </a>
+        <span class="utility-sep">|</span>
         <a href="#" class="utility-link">
           <span class="material-icons">article</span> Góc sức khỏe
         </a>
-        <span class="utility-divider">|</span>
-        <a href="tel:18006821" class="utility-link hotline">
-          <span class="material-icons">headset_mic</span> Hotline: 1800 6821
+        <span class="utility-sep">|</span>
+        <a href="#" class="utility-link">
+          <span class="material-icons">local_hospital</span> Hệ thống nhà thuốc
         </a>
       </div>
     </div>
   </div>
 
-  <!-- Main Header (Deep Blue) -->
+  <!-- Main Header Bar -->
   <div class="main-header">
     <div class="container d-flex align-items-center">
       <!-- Logo -->
       <a routerLink="/" class="logo">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Pharmacity-logo.svg/1200px-Pharmacity-logo.svg.png"
-          alt="Pharmify"
-        />
+        <span class="logo-sub">NHÀ THUỐC</span>
+        <span class="logo-main">Pharmify</span>
       </a>
 
       <!-- Category Button -->
       <a routerLink="/category" class="category-btn">
-        <span class="material-icons">menu</span>
-        <span>Danh mục</span>
+        <span class="material-icons">dashboard</span>
+        <span class="cat-label">Danh mục</span>
+        <span class="material-icons arrow-icon">expand_more</span>
       </a>
 
       <!-- Nav Links -->
       <nav class="header-nav">
-        <a routerLink="/category/thuoc" class="nav-item">Thuốc</a>
-        <a routerLink="/category/thuc-pham-chuc-nang" class="nav-item"
-          >Thực phẩm chức năng</a
+        <a routerLink="/category/thuoc" class="nav-link-item">Thuốc</a>
+        <a routerLink="/category/thuc-pham-chuc-nang" class="nav-link-item"
+          >Thực phẩm bảo vệ sức khỏe</a
         >
-        <a routerLink="/category/cham-soc-ca-nhan" class="nav-item"
-          >Chăm sóc cá nhân</a
+        <a routerLink="/category/cham-soc-ca-nhan" class="nav-link-item"
+          >Mẹ và bé</a
         >
-        <a routerLink="/category/thiet-bi-y-te" class="nav-item"
-          >Thiết bị y tế</a
+        <a routerLink="/category/thiet-bi-y-te" class="nav-link-item"
+          >Nhãn hàng Pharmify</a
         >
       </nav>
 
@@ -59,81 +81,38 @@
 
       <!-- Right Actions -->
       <div class="header-actions">
+        <a href="#" class="action-icon-btn" title="Thông báo">
+          <span class="material-icons">notifications_none</span>
+        </a>
+
+        <a
+          routerLink="/cart"
+          class="action-icon-btn cart-action"
+          title="Giỏ hàng"
+        >
+          <span class="material-icons">shopping_cart_outlined</span>
+          @if (cartItemCount() > 0) {
+            <span class="cart-badge">{{ cartItemCount() }}</span>
+          }
+        </a>
+
         @if (user()) {
-          <a routerLink="/account" class="action-btn">
-            <span class="material-icons">account_circle</span>
-            <div class="action-info">
-              <span class="action-sub">Xin chào</span>
-              <span class="action-main">{{ user()?.email }}</span>
+          <a routerLink="/account" class="user-action">
+            <span class="material-icons">person</span>
+            <div class="user-info">
+              <span class="user-greeting">Xin Chào</span>
+              <span class="user-name">{{ user()?.email || "Tài khoản" }}</span>
             </div>
           </a>
         } @else {
-          <a routerLink="/auth" class="action-btn">
+          <a routerLink="/auth" class="user-action">
             <span class="material-icons">person_outline</span>
-            <div class="action-info">
-              <span class="action-sub">Đăng nhập</span>
-              <span class="action-main">Tài khoản</span>
+            <div class="user-info">
+              <span class="user-greeting">Xin Chào</span>
+              <span class="user-name">Đăng nhập</span>
             </div>
           </a>
         }
-
-        <a routerLink="/cart" class="action-btn cart-btn">
-          <div class="cart-icon-wrap">
-            <span class="material-icons">shopping_cart_outlined</span>
-            @if (cartItemCount() > 0) {
-              <span class="cart-count">{{ cartItemCount() }}</span>
-            }
-          </div>
-          <div class="action-info">
-            <span class="action-sub">Giỏ hàng</span>
-            <span class="action-main">{{ cartItemCount() }} SP</span>
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Floating Search Bar -->
-  <div class="search-section">
-    <div class="container">
-      <div class="search-bar-wrap">
-        <span class="material-icons search-icon">search</span>
-        <input
-          type="text"
-          placeholder="Bạn đang tìm gì hôm nay..."
-          (input)="onSearchInput($event)"
-          class="search-input"
-        />
-        <button class="search-submit">
-          <span class="material-icons">search</span> Tìm kiếm
-        </button>
-      </div>
-      <div class="search-keywords">
-        <span class="keyword-label">Tìm kiếm phổ biến:</span>
-        <a
-          routerLink="/search"
-          [queryParams]="{ q: 'vitamin c' }"
-          class="keyword-tag"
-          >Vitamin C</a
-        >
-        <a
-          routerLink="/search"
-          [queryParams]="{ q: 'paracetamol' }"
-          class="keyword-tag"
-          >Paracetamol</a
-        >
-        <a
-          routerLink="/search"
-          [queryParams]="{ q: 'omega 3' }"
-          class="keyword-tag"
-          >Omega 3</a
-        >
-        <a
-          routerLink="/search"
-          [queryParams]="{ q: 'collagen' }"
-          class="keyword-tag"
-          >Collagen</a
-        >
       </div>
     </div>
   </div>

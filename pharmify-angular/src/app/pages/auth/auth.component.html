@@ -1,56 +1,113 @@
-<div class="auth-page bg-light min-vh-100 d-flex align-items-center justify-content-center py-5">
-  <div class="container">
-    <div class="row justify-content-center m-0">
-      <div class="col-12 col-md-6 col-lg-5">
-        <div class="card bg-white p-4 p-md-5 shadow-sm border-0" style="border-radius: 16px;">
-          
-          <div class="text-center mb-4">
-            <h1 class="font-bold text-primary mb-2">{{ isLoginMode() ? 'Đăng nhập' : 'Đăng ký' }}</h1>
-            <p class="text-secondary">Chào mừng bạn đến với Pharmify</p>
+<div class="auth-page">
+  <div class="auth-card">
+    <!-- Left Brand Panel -->
+    <div class="brand-panel">
+      <div class="brand-content">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Pharmacity-logo.svg/1200px-Pharmacity-logo.svg.png"
+          alt="Pharmify"
+          class="brand-logo"
+        />
+        <h2>Chào mừng đến với Pharmify</h2>
+        <p>Nhà thuốc trực tuyến hàng đầu Việt Nam</p>
+        <div class="brand-features">
+          <div>
+            <span class="material-icons">verified_user</span> Thuốc chính hãng
+            100%
           </div>
-
-          @if (errorMessage()) {
-            <div class="alert bg-orange text-white p-3 rounded mb-4 text-sm max-w-100 truncate-2">
-              {{ errorMessage() }}
-            </div>
-          }
-
-          <form (ngSubmit)="onSubmit()">
-            
-            @if (!isLoginMode()) {
-              <div class="mb-3">
-                <label class="font-semibold mb-2 d-block">Họ và tên</label>
-                <input type="text" class="form-control" name="fullName" [(ngModel)]="fullName" required placeholder="Nhập họ và tên" />
-              </div>
-            }
-
-            <div class="mb-3">
-              <label class="font-semibold mb-2 d-block">Email</label>
-              <input type="email" class="form-control" name="email" [(ngModel)]="email" required placeholder="Nhập địa chỉ email" />
-            </div>
-
-            <div class="mb-4">
-              <label class="font-semibold mb-2 d-block">Mật khẩu</label>
-              <input type="password" class="form-control" name="password" [(ngModel)]="password" required placeholder="Nhập mật khẩu" />
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100 py-3" style="font-size: 16px; border-radius: 8px;" [disabled]="loading()">
-              @if (loading()) {
-                <span class="material-icons rotating me-2" style="font-size: 20px;">autorenew</span> Đang xử lý...
-              } @else {
-                {{ isLoginMode() ? 'Đăng nhập' : 'Đăng ký' }}
-              }
-            </button>
-          </form>
-
-          <div class="text-center mt-4 text-sm">
-            <span class="text-secondary">{{ isLoginMode() ? 'Chưa có tài khoản?' : 'Đã có tài khoản?' }}</span>
-            <button class="btn btn-link text-primary font-semibold ms-1 p-0" (click)="toggleMode()">
-              {{ isLoginMode() ? 'Đăng ký ngay' : 'Đăng nhập' }}
-            </button>
+          <div>
+            <span class="material-icons">local_shipping</span> Giao hàng nhanh 2
+            giờ
           </div>
-
+          <div>
+            <span class="material-icons">support_agent</span> Tư vấn dược sĩ
+            miễn phí
+          </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Right Form Panel -->
+    <div class="form-panel">
+      <div class="form-header">
+        <h1>{{ isLoginMode() ? "Đăng nhập" : "Đăng ký tài khoản" }}</h1>
+        <p>
+          {{
+            isLoginMode()
+              ? "Đăng nhập để tiếp tục mua sắm"
+              : "Tạo tài khoản mới miễn phí"
+          }}
+        </p>
+      </div>
+
+      @if (errorMessage()) {
+        <div class="error-alert">
+          <span class="material-icons">warning</span>
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <form (ngSubmit)="onSubmit()">
+        @if (!isLoginMode()) {
+          <div class="form-group">
+            <label>Họ và tên</label>
+            <div class="input-wrap">
+              <span class="material-icons">person</span>
+              <input
+                type="text"
+                name="fullName"
+                [(ngModel)]="fullName"
+                placeholder="Nhập họ và tên"
+                required
+              />
+            </div>
+          </div>
+        }
+
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrap">
+            <span class="material-icons">email</span>
+            <input
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              placeholder="Nhập địa chỉ email"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Mật khẩu</label>
+          <div class="input-wrap">
+            <span class="material-icons">lock</span>
+            <input
+              type="password"
+              name="password"
+              [(ngModel)]="password"
+              placeholder="Nhập mật khẩu"
+              required
+            />
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="loading()">
+          @if (loading()) {
+            <span class="material-icons spin">autorenew</span> Đang xử lý...
+          } @else {
+            {{ isLoginMode() ? "Đăng nhập" : "Đăng ký" }}
+          }
+        </button>
+      </form>
+
+      <div class="toggle-mode">
+        <span>{{
+          isLoginMode() ? "Chưa có tài khoản?" : "Đã có tài khoản?"
+        }}</span>
+        <button (click)="toggleMode()">
+          {{ isLoginMode() ? "Đăng ký ngay" : "Đăng nhập" }}
+        </button>
       </div>
     </div>
   </div>

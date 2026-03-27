@@ -1,0 +1,84 @@
+@import "../products/products.component.scss";
+
+.order-stats {
+  display: flex;
+  gap: 10px;
+}
+
+.stat-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+
+  &.pending {
+    background: #fff7e6;
+    color: #d48806;
+  }
+  &.confirmed {
+    background: #e6f7ff;
+    color: #1890ff;
+  }
+}
+
+.order-status {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &[data-status="pending"] {
+    background: #fff7e6;
+    color: #d48806;
+  }
+  &[data-status="confirmed"] {
+    background: #e6f7ff;
+    color: #1890ff;
+  }
+  &[data-status="shipping"] {
+    background: #f9f0ff;
+    color: #722ed1;
+  }
+  &[data-status="delivered"] {
+    background: #f6ffed;
+    color: #52c41a;
+  }
+  &[data-status="cancelled"] {
+    background: #fff2f0;
+    color: #ff4d4f;
+  }
+}
+
+.status-select {
+  padding: 4px 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  &:focus {
+    border-color: #1890ff;
+  }
+}
+
+.order-detail-info {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.detail-row {
+  display: flex;
+  padding: 6px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border: none;
+  }
+
+  .label {
+    width: 120px;
+    color: #8c8c8c;
+    flex-shrink: 0;
+  }
+}

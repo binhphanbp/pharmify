@@ -1,52 +1,116 @@
-<div class="category-page bg-light section-padding">
+<div class="category-page">
   <div class="container">
     <!-- Breadcrumb -->
-    <div class="breadcrumb mb-4 text-sm text-secondary">
-      <a routerLink="/" class="text-decoration-none text-secondary">Trang chủ</a>
-      <span class="mx-2">></span>
-      <span class="text-primary font-semibold">{{ categoryName() }}</span>
+    <div class="breadcrumb-bar">
+      <a routerLink="/">Trang chủ</a>
+      <span class="sep">›</span>
+      <span class="current">{{ categoryName() }}</span>
     </div>
 
-    <div class="row d-flex gap-4">
-      <!-- Sidebar Filters -->
-      <aside class="sidebar-filters d-none d-md-block" style="width: 250px; flex-shrink: 0;">
-        <div class="card p-3 mb-3">
-          <h3 class="font-bold mb-3" style="font-size: 16px;">Danh mục</h3>
-          <ul class="list-unstyled p-0 m-0 filter-list">
-            <li><a routerLink="/category" [class.active]="!currentSlug()">Tất cả</a></li>
-            <li><a routerLink="/category/thuoc" [class.active]="currentSlug() === 'thuoc'">Thuốc</a></li>
-            <li><a routerLink="/category/thuc-pham-chuc-nang" [class.active]="currentSlug() === 'thuc-pham-chuc-nang'">Thực phẩm chức năng</a></li>
-            <li><a routerLink="/category/cham-soc-ca-nhan" [class.active]="currentSlug() === 'cham-soc-ca-nhan'">Chăm sóc cá nhân</a></li>
-            <li><a routerLink="/category/thiet-bi-y-te" [class.active]="currentSlug() === 'thiet-bi-y-te'">Thiết bị y tế</a></li>
-            <li><a routerLink="/category/me-va-be" [class.active]="currentSlug() === 'me-va-be'">Mẹ và bé</a></li>
+    <div class="page-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h3 class="sidebar-title">
+            <span class="material-icons">filter_list</span> Danh mục
+          </h3>
+          <ul class="filter-list">
+            <li>
+              <a
+                routerLink="/category"
+                [class.active]="!currentSlug()"
+                class="filter-link"
+                >Tất cả sản phẩm</a
+              >
+            </li>
+            <li>
+              <a
+                routerLink="/category/thuoc"
+                [class.active]="currentSlug() === 'thuoc'"
+                class="filter-link"
+                >Thuốc</a
+              >
+            </li>
+            <li>
+              <a
+                routerLink="/category/thuc-pham-chuc-nang"
+                [class.active]="currentSlug() === 'thuc-pham-chuc-nang'"
+                class="filter-link"
+                >Thực phẩm chức năng</a
+              >
+            </li>
+            <li>
+              <a
+                routerLink="/category/cham-soc-ca-nhan"
+                [class.active]="currentSlug() === 'cham-soc-ca-nhan'"
+                class="filter-link"
+                >Chăm sóc cá nhân</a
+              >
+            </li>
+            <li>
+              <a
+                routerLink="/category/thiet-bi-y-te"
+                [class.active]="currentSlug() === 'thiet-bi-y-te'"
+                class="filter-link"
+                >Thiết bị y tế</a
+              >
+            </li>
+            <li>
+              <a
+                routerLink="/category/me-va-be"
+                [class.active]="currentSlug() === 'me-va-be'"
+                class="filter-link"
+                >Mẹ và bé</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-card">
+          <h3 class="sidebar-title">
+            <span class="material-icons">tune</span> Khoảng giá
+          </h3>
+          <ul class="filter-list">
+            <li><a class="filter-link">Dưới 100.000đ</a></li>
+            <li><a class="filter-link">100.000đ - 300.000đ</a></li>
+            <li><a class="filter-link">300.000đ - 500.000đ</a></li>
+            <li><a class="filter-link">Trên 500.000đ</a></li>
           </ul>
         </div>
       </aside>
 
       <!-- Main Content -->
-      <main class="flex-grow-1">
-        <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded shadow-sm border">
-          <h1 class="font-bold m-0" style="font-size: 20px;">{{ categoryName() }}</h1>
-          <div class="sort-by text-sm">
-            <span>Sắp xếp theo: </span>
-            <select class="form-select d-inline-block w-auto ms-2 border-0 bg-light p-1 rounded">
+      <main class="content">
+        <div class="content-header">
+          <h1 class="page-title">{{ categoryName() }}</h1>
+          <div class="sort-wrapper">
+            <span class="sort-label">Sắp xếp:</span>
+            <select class="sort-select">
               <option>Bán chạy nhất</option>
               <option>Giá thấp đến cao</option>
               <option>Giá cao đến thấp</option>
+              <option>Mới nhất</option>
             </select>
           </div>
         </div>
 
         <div class="product-grid">
           @if (loading()) {
-            <app-loading-skeleton *ngFor="let i of [1,2,3,4,5,6,7,8]" type="product-card"></app-loading-skeleton>
+            <div
+              *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8]"
+              class="skeleton product-skeleton"
+            ></div>
           } @else if (products().length === 0) {
-            <div class="text-center py-5 bg-white rounded border">
-              <span class="material-icons text-light" style="font-size: 48px;">inventory_2</span>
-              <p class="mt-3 text-secondary">Không tìm thấy sản phẩm nào.</p>
+            <div class="empty-state">
+              <span class="material-icons">inventory_2</span>
+              <p>Không tìm thấy sản phẩm nào trong danh mục này.</p>
+              <a routerLink="/" class="btn-back">Về trang chủ</a>
             </div>
           } @else {
-            <app-product-card *ngFor="let product of products()" [product]="product"></app-product-card>
+            <app-product-card
+              *ngFor="let product of products()"
+              [product]="product"
+            ></app-product-card>
           }
         </div>
       </main>

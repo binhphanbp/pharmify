@@ -1,0 +1,124 @@
+@import "../products/products.component.scss";
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  background: white;
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.tab {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s;
+  &.active {
+    background: #1890ff;
+    color: white;
+  }
+  &:hover:not(.active) {
+    background: #f5f5f5;
+  }
+}
+
+.banner-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.banner-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s;
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.banner-img-wrap {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.banner-position {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.banner-order {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  background: #1890ff;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.banner-info {
+  padding: 14px 16px;
+
+  strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+  small {
+    display: block;
+    color: #8c8c8c;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+}
+
+.banner-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.link-text {
+  font-size: 12px;
+  color: #1890ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.banner-actions {
+  display: flex;
+  gap: 4px;
+  padding: 0 16px 14px;
+}

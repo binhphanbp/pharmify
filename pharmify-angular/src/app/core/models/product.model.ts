@@ -12,6 +12,7 @@ export interface Product {
   image_url?: string;
   category_name: string;
   category_slug: string;
+  base_unit_id: string;
   base_unit_name: string;
   price: number;
   original_price?: number;
@@ -28,14 +29,17 @@ export interface ProductDetail extends Product {
   usage_instructions?: string;
   storage_instructions?: string;
   units: ProductUnit[];
+  // v_product_detail may not have top-level price/base_unit_name
+  // They exist inside units array instead
 }
 
 export interface ProductUnit {
   id: string;
+  unit_id?: string; // v_product_detail uses unit_id instead of id
   unit_name: string;
   conversion_factor: number;
   is_base_unit: boolean;
   price?: number;
   original_price?: number;
-  is_active: boolean;
+  is_active?: boolean;
 }

@@ -1,110 +1,181 @@
-<div class="product-detail-page bg-light section-padding">
+<div class="product-detail-page">
   <div class="container">
     @if (loading()) {
-      <div class="row">
-        <div class="col-12 col-md-5">
-          <app-loading-skeleton type="banner"></app-loading-skeleton>
-        </div>
-        <div class="col-12 col-md-7">
-           <app-loading-skeleton type="product-card"></app-loading-skeleton>
-           <app-loading-skeleton type="product-card" class="mt-3"></app-loading-skeleton>
+      <div class="loading-layout">
+        <div
+          class="skeleton"
+          style="height: 400px; border-radius: 12px; flex: 0 0 40%"
+        ></div>
+        <div style="flex: 1">
+          <div
+            class="skeleton"
+            style="
+              height: 32px;
+              width: 70%;
+              border-radius: 8px;
+              margin-bottom: 16px;
+            "
+          ></div>
+          <div
+            class="skeleton"
+            style="
+              height: 24px;
+              width: 40%;
+              border-radius: 8px;
+              margin-bottom: 24px;
+            "
+          ></div>
+          <div
+            class="skeleton"
+            style="
+              height: 48px;
+              width: 50%;
+              border-radius: 8px;
+              margin-bottom: 16px;
+            "
+          ></div>
+          <div class="skeleton" style="height: 48px; border-radius: 8px"></div>
         </div>
       </div>
     } @else {
       @if (product(); as p) {
         <!-- Breadcrumb -->
-      <div class="breadcrumb mb-4 text-sm text-secondary">
-        <a routerLink="/" class="text-decoration-none text-secondary">Trang chủ</a>
-        <span class="mx-2">></span>
-        <a [routerLink]="['/category', p.category_slug]" class="text-decoration-none text-secondary">{{ p.category_name }}</a>
-        <span class="mx-2">></span>
-        <span class="text-secondary">{{ p.name }}</span>
-      </div>
+        <div class="breadcrumb-bar">
+          <a routerLink="/">Trang chủ</a>
+          <span class="sep">›</span>
+          <a [routerLink]="['/category', p.category_slug]">{{
+            p.category_name
+          }}</a>
+          <span class="sep">›</span>
+          <span class="current">{{ p.name }}</span>
+        </div>
 
-      <div class="product-buy-section card bg-white mb-4">
-        <div class="row p-4 m-0">
-          
-          <!-- Image Gallery -->
-          <div class="col-12 col-md-5 mb-4 mb-md-0 d-flex justify-content-center align-items-center bg-white rounded border">
-            <img [src]="p.image_url || 'assets/images/placeholder.png'" [alt]="p.name" class="img-fluid" style="max-height: 400px; object-fit: contain;" />
+        <!-- Product Buy Section -->
+        <div class="buy-section">
+          <!-- Image -->
+          <div class="product-gallery">
+            <img
+              [src]="p.image_url || ''"
+              [alt]="p.name"
+              onerror="
+                this.src =
+                  'https://placehold.co/400x400/f8f9fa/ccc?text=Pharmify'
+              "
+            />
           </div>
 
-          <!-- Info & Actions -->
-          <div class="col-12 col-md-7 ps-md-5 d-flex flex-column">
-            <div class="brand text-primary font-semibold text-sm mb-2">{{ p.brand_name || 'Khác' }}</div>
-            <h1 class="product-title font-bold mb-3" style="font-size: 24px;">{{ p.name }}</h1>
-            
-            <div class="d-flex align-items-center gap-3 mb-4">
-              <span class="price-current text-primary font-bold" style="font-size: 28px;">
-                {{ currentPrice | currency:'VND':'symbol':'1.0-0' }}
-              </span>
-              <span class="text-secondary">/ {{ p.base_unit_name }}</span>
+          <!-- Info -->
+          <div class="product-info">
+            <span class="brand-name">{{
+              p.brand_name || "Thương hiệu khác"
+            }}</span>
+            <h1 class="product-title">{{ p.name }}</h1>
+
+            <div class="price-block">
+              <span class="price-value">{{
+                currentPrice | currency: "VND" : "symbol" : "1.0-0"
+              }}</span>
+              <span class="price-unit">/ {{ currentUnitName }}</span>
+              @if (originalPrice) {
+                <span class="price-original">{{
+                  originalPrice | currency: "VND" : "symbol" : "1.0-0"
+                }}</span>
+              }
+              @if (discountPercent) {
+                <span class="discount-badge">-{{ discountPercent }}%</span>
+              }
             </div>
 
-            <!-- Units Selection -->
-            <div class="units-selector mb-4">
-              <div class="font-semibold mb-2">Chọn đơn vị:</div>
-              <div class="d-flex flex-wrap gap-2">
-                <button 
-                  *ngFor="let unit of p.units" 
-                  class="btn-unit px-3 py-2 rounded border"
-                  [class.active]="selectedUnit() === unit.id"
-                  (click)="selectUnit(unit.id)"
+            <!-- Unit Selector -->
+            <div class="unit-selector">
+              <label class="unit-label">Chọn quy cách:</label>
+              <div class="unit-options">
+                <button
+                  *ngFor="let unit of p.units"
+                  class="unit-btn"
+                  [class.active]="
+                    selectedUnitId() === (unit.unit_id || unit.id)
+                  "
+                  (click)="selectUnit(unit.unit_id || unit.id)"
                 >
                   {{ unit.unit_name }}
-                  <span *ngIf="unit.conversion_factor > 1" class="text-sm d-block text-secondary">({{ unit.conversion_factor }} {{ p.base_unit_name }})</span>
+                  <span *ngIf="unit.conversion_factor > 1" class="unit-factor"
+                    >({{ unit.conversion_factor }})</span
+                  >
                 </button>
               </div>
             </div>
 
-            <hr class="text-light my-3">
+            <hr class="divider" />
 
-            <!-- Quantity & Add to Cart -->
-            <div class="d-flex align-items-center gap-3 mt-auto">
-              <div class="quantity-control d-flex align-items-center border rounded">
-                <button class="btn btn-qty px-3 py-2" (click)="decreaseQuantity()">-</button>
-                <input type="number" class="form-control text-center border-0" style="width: 50px;" [value]="quantity()" readonly />
-                <button class="btn btn-qty px-3 py-2" (click)="increaseQuantity()">+</button>
+            <!-- Quantity & Buy -->
+            <div class="buy-actions">
+              <div class="qty-control">
+                <button (click)="decreaseQuantity()" class="qty-btn">
+                  <span class="material-icons">remove</span>
+                </button>
+                <input
+                  type="number"
+                  [value]="quantity()"
+                  readonly
+                  class="qty-input"
+                />
+                <button (click)="increaseQuantity()" class="qty-btn">
+                  <span class="material-icons">add</span>
+                </button>
               </div>
-              
-              <button class="btn btn-primary flex-grow-1 py-3" style="border-radius: 8px; font-size: 16px;" (click)="addToCart()">
-                Chọn mua
+              <button class="buy-btn" (click)="addToCart()">
+                <span class="material-icons">shopping_cart</span> Chọn mua
               </button>
             </div>
 
+            <!-- Trust Badges -->
+            <div class="trust-badges">
+              <div class="badge-item">
+                <span class="material-icons">verified_user</span> Chính hãng
+                100%
+              </div>
+              <div class="badge-item">
+                <span class="material-icons">local_shipping</span> Giao nhanh 2h
+              </div>
+              <div class="badge-item">
+                <span class="material-icons">swap_horiz</span> Đổi trả dễ dàng
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Detail Info Tabs -->
-      <div class="product-info-section card bg-white p-4">
-        <h2 class="font-bold mb-4" style="font-size: 20px;">Thông tin sản phẩm</h2>
-        
-        <div class="content-block mb-4">
-          <h3 class="font-semibold text-primary mb-2">Mô tả ngắn</h3>
-          <p class="text-secondary" style="white-space: pre-line;">{{ p.short_description }}</p>
+        <!-- Product Details Tabs -->
+        <div class="detail-section">
+          <h2 class="detail-title">
+            <span class="material-icons">description</span> Thông tin sản phẩm
+          </h2>
+
+          <div class="detail-block" *ngIf="p.short_description">
+            <h3>Mô tả ngắn</h3>
+            <p>{{ p.short_description }}</p>
+          </div>
+
+          <div class="detail-block" *ngIf="p.description">
+            <h3>Mô tả chi tiết</h3>
+            <div [innerHTML]="p.description"></div>
+          </div>
+
+          <div class="detail-block" *ngIf="p.active_ingredient">
+            <h3>Thành phần</h3>
+            <p>{{ p.active_ingredient }}</p>
+          </div>
+
+          <div class="detail-block" *ngIf="p.usage_instructions">
+            <h3>Hướng dẫn sử dụng</h3>
+            <p style="white-space: pre-line">{{ p.usage_instructions }}</p>
+          </div>
         </div>
-
-        <div class="content-block mb-4" *ngIf="p.description">
-          <h3 class="font-semibold text-primary mb-2">Mô tả chi tiết</h3>
-          <p class="text-secondary" [innerHTML]="p.description"></p>
-        </div>
-
-        <div class="content-block mb-4" *ngIf="p.active_ingredient">
-          <h3 class="font-semibold text-primary mb-2">Thành phần</h3>
-          <p class="text-secondary">{{ p.active_ingredient }}</p>
-        </div>
-
-        <div class="content-block mb-4" *ngIf="p.usage_instructions">
-          <h3 class="font-semibold text-primary mb-2">Hướng dẫn sử dụng</h3>
-          <p class="text-secondary" style="white-space: pre-line;">{{ p.usage_instructions }}</p>
-        </div>
-      </div>
-
       } @else {
-        <div class="text-center py-5">
+        <div class="not-found">
+          <span class="material-icons">search_off</span>
           <h2>Không tìm thấy sản phẩm</h2>
-          <a routerLink="/" class="btn btn-primary mt-3">Về trang chủ</a>
+          <a routerLink="/" class="btn-back">Về trang chủ</a>
         </div>
       }
     }

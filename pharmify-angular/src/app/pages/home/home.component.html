@@ -1,28 +1,142 @@
 <div class="home-page">
-  <!-- Hero Banner Carousel -->
-  <section class="hero-banner">
+  <!-- ===== HERO SECTION ===== -->
+  <section class="hero-section">
     <div class="container">
-      <swiper-container
-        navigation="true"
-        pagination="true"
-        autoplay-delay="4000"
-        loop="true"
-        class="hero-swiper"
-      >
-        <swiper-slide *ngFor="let banner of banners; let i = index">
-          <img
-            [src]="banner"
-            alt="Banner {{ i + 1 }}"
-            class="banner-img"
-            onerror="
-              this.src =
-                'https://placehold.co/1200x400/004D95/FFF?text=Ph%E1%BA%A5Mify+%E2%80%93+Nh%C3%A0+thu%E1%BB%91c+online+s%E1%BB%91+1'
-            "
-          />
-        </swiper-slide>
-      </swiper-container>
+      <!-- Hero Banner with search overlaid at bottom -->
+      <div class="hero-banner-wrap">
+        @if (loadingBanners()) {
+          <div class="banner-skeleton skeleton"></div>
+        } @else if (heroBanners().length > 0) {
+          <swiper-container
+            navigation="true"
+            pagination="true"
+            autoplay-delay="4000"
+            loop="true"
+            class="hero-swiper"
+          >
+            <swiper-slide *ngFor="let banner of heroBanners()">
+              <a [routerLink]="banner.link_url || '/'" class="banner-slide">
+                <img
+                  [src]="banner.image_url"
+                  [alt]="banner.title"
+                  class="banner-img"
+                  onerror="
+                    this.src =
+                      'https://placehold.co/1200x400/004D95/FFF?text=Pharmify'
+                  "
+                />
+                <div class="banner-overlay">
+                  <h2 class="banner-title">{{ banner.title }}</h2>
+                  <p class="banner-subtitle" *ngIf="banner.subtitle">
+                    {{ banner.subtitle }}
+                  </p>
+                  <span class="banner-cta">Tìm hiểu ngay</span>
+                </div>
+              </a>
+            </swiper-slide>
+          </swiper-container>
+        }
+
+        <!-- Search bar sits at bottom edge of the banner -->
+        <div class="hero-search-wrap">
+          <div class="hero-search-bar">
+            <span class="material-icons search-icon">search</span>
+            <input
+              type="text"
+              placeholder="Bạn đang tìm gì hôm nay..."
+              (input)="onSearchInput($event)"
+              class="search-input"
+            />
+          </div>
+          <div class="search-tags">
+            <a
+              routerLink="/search"
+              [queryParams]="{ q: 'khẩu trang' }"
+              class="search-tag"
+              >khẩu trang</a
+            >
+            <a
+              routerLink="/search"
+              [queryParams]="{ q: 'sữa dinh dưỡng' }"
+              class="search-tag"
+              >sữa dinh dưỡng</a
+            >
+            <a
+              routerLink="/search"
+              [queryParams]="{ q: 'collagen' }"
+              class="search-tag"
+              >collagen</a
+            >
+            <a
+              routerLink="/search"
+              [queryParams]="{ q: 'mặt nạ' }"
+              class="search-tag"
+              >mặt nạ</a
+            >
+            <a
+              routerLink="/search"
+              [queryParams]="{ q: 'thực phẩm bảo vệ sức khỏe' }"
+              class="search-tag"
+              >thực phẩm bảo vệ sức khỏe</a
+            >
+            <a
+              routerLink="/search"
+              [queryParams]="{ q: 'probiotics' }"
+              class="search-tag"
+              >probiotics</a
+            >
+            <a
+              routerLink="/search"
+              [queryParams]="{ q: 'Mua 1 Tặng 1' }"
+              class="search-tag"
+              >Mua 1 Tặng 1</a
+            >
+          </div>
+          <div class="quick-actions">
+            <a routerLink="/category/thuoc" class="quick-action-item">
+              <span class="material-icons">medication</span>
+              <span>Đặt đơn thuốc</span>
+              <span class="material-icons chevron">chevron_right</span>
+            </a>
+            <a href="#" class="quick-action-item">
+              <span class="material-icons">support_agent</span>
+              <span>Liên hệ dược sĩ</span>
+              <span class="material-icons chevron">chevron_right</span>
+            </a>
+            <a href="#" class="quick-action-item">
+              <span class="material-icons">location_on</span>
+              <span>Tìm nhà thuốc</span>
+              <span class="material-icons chevron">chevron_right</span>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
+
+  <!-- Sub Banners Carousel (Like Pharmacity promotions) -->
+  @if (subBanners().length > 0) {
+    <section class="sub-banners">
+      <div class="container">
+        <div class="sub-banner-grid">
+          <a
+            *ngFor="let banner of subBanners()"
+            [routerLink]="banner.link_url || '/'"
+            class="sub-banner-item"
+          >
+            <img
+              [src]="banner.image_url"
+              [alt]="banner.title"
+              onerror="
+                this.src =
+                  'https://placehold.co/600x300/0072BC/FFF?text=Pharmify+Sale'
+              "
+            />
+          </a>
+        </div>
+      </div>
+    </section>
+  }
 
   <!-- Category Icons (Danh mục tủ thuốc) -->
   <section class="categories-section">
@@ -117,28 +231,36 @@
     </div>
   </section>
 
-  <!-- Brands Slider -->
-  <section class="brands-section">
-    <div class="container">
-      <h2 class="section-title">
-        <span class="material-icons text-primary">workspace_premium</span>
-        Thương hiệu nổi bật
-      </h2>
-      <div class="brand-grid">
-        <a class="brand-item" *ngFor="let brand of brands" href="#">
-          <img
-            [src]="brand.image"
-            [alt]="brand.name"
-            onerror="
-              this.src = 'https://placehold.co/120x60/fff/ccc?text=Brand'
-            "
-          />
-        </a>
+  <!-- Brands Section -->
+  @if (brands().length > 0) {
+    <section class="brands-section">
+      <div class="container">
+        <h2 class="section-title">
+          <span class="material-icons text-primary">workspace_premium</span>
+          Thương hiệu nổi bật
+        </h2>
+        <div class="brand-grid">
+          <a
+            class="brand-item"
+            *ngFor="let brand of brands()"
+            [href]="brand.website_url || '#'"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              [src]="brand.logo_url"
+              [alt]="brand.name"
+              onerror="
+                this.src = 'https://placehold.co/120x60/fff/ccc?text=Brand'
+              "
+            />
+          </a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  }
 
-  <!-- Benefits Bar (Above Footer — Like Pharmacity) -->
+  <!-- Benefits Bar -->
   <section class="benefits-section">
     <div class="container">
       <div class="benefits-grid">
@@ -153,7 +275,7 @@
           <span class="material-icons benefit-icon">verified_user</span>
           <div>
             <strong>Cam kết 100% chính hãng</strong>
-            <span>Đàm bảo chất lượng sản phẩm</span>
+            <span>Đảm bảo chất lượng sản phẩm</span>
           </div>
         </div>
         <div class="benefit-card">

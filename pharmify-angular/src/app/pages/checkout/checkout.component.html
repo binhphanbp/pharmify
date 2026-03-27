@@ -1,0 +1,279 @@
+<div class="checkout-page">
+  <div class="container">
+    <!-- SUCCESS STATE -->
+    @if (orderSuccess()) {
+      <div class="order-success">
+        <div class="success-card">
+          <div class="success-icon">
+            <span class="material-icons">check_circle</span>
+          </div>
+          <h2>Đặt hàng thành công!</h2>
+          <p class="order-number">
+            Mã đơn hàng: <strong>{{ orderResult()?.order_number }}</strong>
+          </p>
+          <div class="order-details">
+            <div class="detail-row">
+              <span>Tổng tiền:</span>
+              <span class="amount">{{
+                orderResult()?.total | currency: "VND" : "symbol" : "1.0-0"
+              }}</span>
+            </div>
+            @if (orderResult()?.discount > 0) {
+              <div class="detail-row discount">
+                <span>Giảm giá:</span>
+                <span
+                  >-{{
+                    orderResult()?.discount
+                      | currency: "VND" : "symbol" : "1.0-0"
+                  }}</span
+                >
+              </div>
+            }
+            <div class="detail-row">
+              <span>Thanh toán:</span>
+              <span class="payment-method">Thanh toán khi nhận hàng (COD)</span>
+            </div>
+          </div>
+          <p class="success-note">
+            Chúng tôi sẽ liên hệ để xác nhận đơn hàng trong thời gian sớm nhất.
+          </p>
+          <div class="success-actions">
+            <a routerLink="/" class="btn-primary">
+              <span class="material-icons">home</span> Về trang chủ
+            </a>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <!-- CHECKOUT FORM -->
+      <h1 class="page-heading">
+        <span class="material-icons">local_shipping</span>
+        Thanh toán
+      </h1>
+
+      @if (errorMsg()) {
+        <div class="error-banner">
+          <span class="material-icons">error</span>
+          {{ errorMsg() }}
+        </div>
+      }
+
+      <div class="checkout-layout">
+        <!-- Left: Shipping Info -->
+        <div class="checkout-form">
+          <div class="form-card">
+            <h3>
+              <span class="material-icons">person</span> Thông tin người nhận
+            </h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Họ và tên *</label>
+                <input
+                  type="text"
+                  [(ngModel)]="form.fullName"
+                  placeholder="Nguyễn Văn A"
+                />
+              </div>
+              <div class="form-group">
+                <label>Số điện thoại *</label>
+                <input
+                  type="tel"
+                  [(ngModel)]="form.phone"
+                  placeholder="0912 345 678"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                [(ngModel)]="form.email"
+                placeholder="email@example.com"
+              />
+            </div>
+          </div>
+
+          <div class="form-card">
+            <h3>
+              <span class="material-icons">location_on</span> Địa chỉ giao hàng
+            </h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Tỉnh/Thành phố *</label>
+                <input
+                  type="text"
+                  [(ngModel)]="form.province"
+                  placeholder="TP. Hồ Chí Minh"
+                />
+              </div>
+              <div class="form-group">
+                <label>Quận/Huyện</label>
+                <input
+                  type="text"
+                  [(ngModel)]="form.district"
+                  placeholder="Quận 1"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Phường/Xã</label>
+                <input
+                  type="text"
+                  [(ngModel)]="form.ward"
+                  placeholder="Phường Bến Nghé"
+                />
+              </div>
+              <div class="form-group">
+                <label>Số nhà, đường *</label>
+                <input
+                  type="text"
+                  [(ngModel)]="form.address"
+                  placeholder="123 Nguyễn Huệ"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Ghi chú</label>
+              <textarea
+                [(ngModel)]="form.notes"
+                rows="2"
+                placeholder="Giao giờ hành chính, gọi trước khi giao..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <h3>
+              <span class="material-icons">payments</span> Phương thức thanh
+              toán
+            </h3>
+            <div class="payment-options">
+              <label
+                class="payment-option"
+                [class.selected]="form.paymentMethod === 'cod'"
+              >
+                <input
+                  type="radio"
+                  name="payment"
+                  value="cod"
+                  [(ngModel)]="form.paymentMethod"
+                />
+                <span class="material-icons">local_shipping</span>
+                <div>
+                  <strong>Thanh toán khi nhận hàng (COD)</strong>
+                  <small>Thanh toán bằng tiền mặt khi nhận được hàng</small>
+                </div>
+              </label>
+              <label class="payment-option disabled">
+                <input type="radio" name="payment" value="bank" disabled />
+                <span class="material-icons">account_balance</span>
+                <div>
+                  <strong>Chuyển khoản ngân hàng</strong>
+                  <small>Sắp ra mắt</small>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Order Summary -->
+        <div class="checkout-summary">
+          <div class="summary-card">
+            <h3>Đơn hàng ({{ summary()?.item_count || 0 }} sản phẩm)</h3>
+
+            <div class="order-items">
+              @for (
+                item of summary()?.items;
+                track item.product_id + item.unit_id
+              ) {
+                <div class="order-item">
+                  <img
+                    [src]="item.image_url || 'assets/images/placeholder.png'"
+                    [alt]="item.product_name"
+                  />
+                  <div class="item-detail">
+                    <span class="name">{{ item.product_name }}</span>
+                    <span class="meta"
+                      >{{ item.unit_name }} × {{ item.quantity }}</span
+                    >
+                  </div>
+                  <span class="price">{{
+                    item.subtotal || 0 | currency: "VND" : "symbol" : "1.0-0"
+                  }}</span>
+                </div>
+              }
+            </div>
+
+            <hr class="divider" />
+
+            <!-- Coupon -->
+            <div class="coupon-section">
+              <input
+                type="text"
+                [(ngModel)]="form.couponCode"
+                placeholder="Nhập mã giảm giá"
+                class="coupon-input"
+              />
+              <button
+                class="coupon-btn"
+                (click)="cartService.syncWithServer(form.couponCode)"
+              >
+                Áp dụng
+              </button>
+            </div>
+
+            <div class="totals">
+              <div class="total-row">
+                <span>Tạm tính</span>
+                <span>{{
+                  summary()?.total_amount || 0
+                    | currency: "VND" : "symbol" : "1.0-0"
+                }}</span>
+              </div>
+              <div class="total-row">
+                <span>Phí vận chuyển</span>
+                <span class="free">Miễn phí</span>
+              </div>
+              @if (summary()?.discount_amount) {
+                <div class="total-row discount">
+                  <span>Giảm giá</span>
+                  <span
+                    >-{{
+                      summary()?.discount_amount
+                        | currency: "VND" : "symbol" : "1.0-0"
+                    }}</span
+                  >
+                </div>
+              }
+              <hr class="divider" />
+              <div class="total-row grand">
+                <span>Tổng cộng</span>
+                <span class="grand-total">{{
+                  summary()?.final_total || summary()?.total_amount || 0
+                    | currency: "VND" : "symbol" : "1.0-0"
+                }}</span>
+              </div>
+            </div>
+
+            <button
+              class="place-order-btn"
+              (click)="placeOrder()"
+              [disabled]="placing()"
+            >
+              @if (placing()) {
+                <span class="material-icons spin">sync</span> Đang xử lý...
+              } @else {
+                <span class="material-icons">lock</span> Đặt hàng
+              }
+            </button>
+
+            <a routerLink="/cart" class="back-link">
+              <span class="material-icons">arrow_back</span> Quay lại giỏ hàng
+            </a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

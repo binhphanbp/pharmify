@@ -11,9 +11,9 @@ import { Product } from '../../core/models/product.model';
 @Component({
   selector: 'app-category',
   standalone: true,
-  imports: [CommonModule, RouterModule, ProductCardComponent, LoadingSkeletonComponent],
+  imports: [CommonModule, RouterModule, ProductCardComponent],
   templateUrl: './category.component.html',
-  styleUrls: ['./category.component.scss']
+  styleUrls: ['./category.component.scss'],
 })
 export class CategoryComponent implements OnInit {
   products = signal<Product[]>([]);
@@ -23,11 +23,11 @@ export class CategoryComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private supabase: SupabaseService
+    private supabase: SupabaseService,
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       this.currentSlug.set(params.get('slug'));
       this.loadProducts();
     });
@@ -37,7 +37,7 @@ export class CategoryComponent implements OnInit {
     this.loading.set(true);
     try {
       let query = this.supabase.client.from('v_product_catalog').select('*');
-      
+
       const slug = this.currentSlug();
       if (slug) {
         query = query.eq('category_slug', slug);
@@ -49,7 +49,7 @@ export class CategoryComponent implements OnInit {
 
       const { data, error } = await query;
       if (error) throw error;
-      
+
       this.products.set(data as Product[]);
     } catch (err) {
       console.error('Error loading category products', err);
