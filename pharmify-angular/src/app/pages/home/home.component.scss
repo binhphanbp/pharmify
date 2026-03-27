@@ -1,0 +1,298 @@
+:host {
+  display: block;
+}
+
+.home-page {
+  padding-bottom: 0;
+}
+
+/* === Hero Banner === */
+.hero-banner {
+  background: var(--primary-blue);
+  padding: 0 0 20px;
+
+  .hero-swiper {
+    width: 100%;
+    height: 360px;
+    border-radius: var(--border-radius-xl);
+    overflow: hidden;
+  }
+
+  swiper-slide {
+    display: flex;
+    background: var(--primary-blue);
+  }
+
+  .banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+/* === Category Grid === */
+.categories-section {
+  padding: 32px 0;
+  background: var(--bg-color);
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16px 8px 12px;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+
+  &:hover {
+    border-color: var(--secondary-blue);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+    .cat-icon-wrap {
+      background: var(--secondary-blue);
+      .material-icons {
+        color: white;
+      }
+    }
+  }
+}
+
+.cat-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--light-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  transition: all 0.25s;
+
+  .material-icons {
+    font-size: 26px;
+    color: var(--secondary-blue);
+    transition: color 0.25s;
+  }
+  img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+  }
+}
+
+.cat-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.skeleton-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 8px;
+  background: white;
+  border-radius: var(--border-radius-lg);
+}
+.cat-icon-skeleton {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+.cat-name-skeleton {
+  width: 60px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+/* === Product Sections === */
+.product-section {
+  padding: 32px 0;
+  background: white;
+
+  &.alt-bg {
+    background: var(--bg-color);
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  .section-title {
+    margin-bottom: 0;
+  }
+}
+
+.view-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--secondary-blue);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: all 0.2s;
+
+  .material-icons {
+    font-size: 18px;
+    transition: transform 0.2s;
+  }
+
+  &:hover {
+    background: var(--light-blue);
+    .material-icons {
+      transform: translateX(3px);
+    }
+  }
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+}
+
+.product-skeleton {
+  height: 340px;
+  border-radius: var(--border-radius-lg);
+}
+
+/* === Brands === */
+.brands-section {
+  background: white;
+  padding: 32px 0;
+}
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.brand-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  padding: 12px;
+  height: 72px;
+  transition: all 0.2s;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: grayscale(40%);
+    transition: filter 0.2s;
+  }
+
+  &:hover {
+    border-color: var(--secondary-blue);
+    box-shadow: var(--shadow-sm);
+    img {
+      filter: grayscale(0%);
+    }
+  }
+}
+
+/* === Benefits Bar (Pharmacity Feature) === */
+.benefits-section {
+  background: var(--bg-color);
+  padding: 32px 0;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.benefit-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s;
+
+  .benefit-icon {
+    font-size: 32px;
+    color: var(--secondary-blue);
+    flex-shrink: 0;
+  }
+
+  strong {
+    display: block;
+    font-size: 14px;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+
+  span {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    .benefit-icon {
+      color: var(--primary-blue);
+    }
+  }
+}

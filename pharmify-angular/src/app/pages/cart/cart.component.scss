@@ -1,0 +1,72 @@
+.cart-page {
+  .bg-light { background-color: var(--bg-color); }
+  .border { border: 1px solid var(--border-color); }
+  .border-bottom { border-bottom: 1px solid var(--border-color); }
+  
+  .btn-link {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .text-end { text-align: right; }
+  .text-start { text-align: left; }
+
+  .qty-control {
+    background: white;
+    .btn-qty {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--text-secondary);
+      &:hover { color: var(--primary-blue); }
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  .position-sticky {
+    position: sticky;
+  }
+
+  .input-group {
+    input {
+      border-right: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    button {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  /* BS grid */
+  .row { display: flex; flex-wrap: wrap; margin-left: -8px; margin-right: -8px; }
+  [class*="col-"] { padding-left: 8px; padding-right: 8px; }
+  .col-12 { flex: 0 0 100%; max-width: 100%; }
+  .col-6 { flex: 0 0 50%; max-width: 50%; }
+  .col-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+  .col-3 { flex: 0 0 25%; max-width: 25%; }
+  .col-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+
+  @media (min-width: 768px) {
+    .col-md-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+    .col-md-3 { flex: 0 0 25%; max-width: 25%; }
+    .col-md-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+    .text-md-center { text-align: center; }
+    .justify-content-md-center { justify-content: center; }
+    .d-none { display: none !important; }
+    .d-md-flex { display: flex !important; }
+  }
+  
+  @media (min-width: 992px) {
+    .col-lg-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
+    .col-lg-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+  }
+  
+  .min-vh-100 { min-height: 100vh; }
+}

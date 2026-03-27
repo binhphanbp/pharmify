@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giỏ hàng - Pharmify</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+    .cart-layout {
+      display: flex;
+      gap: 30px;
+    }
+    .cart-main {
+      flex-grow: 1;
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .cart-sidebar {
+      width: 350px;
+      flex-shrink: 0;
+    }
+    .cart-summary {
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 100px;
+    }
+    
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .cart-table th {
+      text-align: left;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #eee;
+      color: #666;
+      font-weight: 600;
+    }
+    .cart-item {
+      border-bottom: 1px solid #eee;
+    }
+    .cart-item td {
+      padding: 20px 0;
+      vertical-align: middle;
+    }
+    .item-info {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .item-img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      padding: 5px;
+    }
+    .item-name {
+      font-weight: 600;
+      color: #333;
+      font-size: 15px;
+      text-decoration: none;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .item-name:hover {
+      color: #004DA0;
+    }
+    .item-price {
+      font-weight: 700;
+      color: #004DA0;
+    }
+    .item-old-price {
+      font-size: 13px;
+      color: #999;
+      text-decoration: line-through;
+      display: block;
+    }
+    
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      width: fit-content;
+      overflow: hidden;
+    }
+    .quantity-controls button {
+      background: #f5f5f5;
+      border: none;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .quantity-controls input {
+      width: 40px;
+      height: 30px;
+      border: none;
+      border-left: 1px solid #ddd;
+      border-right: 1px solid #ddd;
+      text-align: center;
+      font-weight: 600;
+      outline: none;
+    }
+    
+    .btn-remove {
+      background: none;
+      border: none;
+      color: #e74c3c;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .btn-remove:hover {
+      color: #c0392b;
+    }
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      color: #555;
+      font-size: 15px;
+    }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px dashed #eee;
+      font-size: 18px;
+      font-weight: 700;
+      color: #333;
+    }
+    .summary-total .price {
+      color: #e74c3c;
+      font-size: 24px;
+    }
+    
+    .coupon-box {
+      display: flex;
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+    .coupon-box input {
+      flex-grow: 1;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px 0 0 6px;
+      outline: none;
+    }
+    .coupon-box button {
+      padding: 0 20px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 0 6px 6px 0;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .btn-checkout {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      text-align: center;
+      background: #004DA0;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+    .btn-checkout:hover {
+      background: #003366;
+    }
+    
+    .empty-cart-msg {
+      text-align: center;
+      padding: 50px 0;
+    }
+    .empty-cart-msg i {
+      font-size: 60px;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+    .empty-cart-msg p {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 992px) {
+      .cart-layout {
+        flex-direction: column;
+      }
+      .cart-sidebar {
+        width: 100%;
+      }
+      .cart-summary {
+        position: static;
+      }
+      .cart-table th.col-price, 
+      .cart-table td.col-price {
+        display: none;
+      }
+    }
+    @media (max-width: 576px) {
+      .item-info {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Dynamic Header -->
+  <div id="app-header"></div>
+
+  <main class="bg-gray pt-20 pb-40">
+    <div class="container">
+      
+      <!-- Breadcrumb -->
+      <div class="breadcrumb mb-20">
+        <a href="index.html">Trang chủ</a>
+        <span class="separator"><i class="fas fa-chevron-right" style="font-size:10px"></i></span>
+        <span>Giỏ hàng</span>
+      </div>
+
+      <h1 class="mb-20" style="font-size: 24px; font-weight: 700;">Giỏ hàng của bạn</h1>
+
+      <div class="cart-layout" id="cartLayout">
+        
+        <!-- Rendered via JS completely to handle empty/full states -->
+        
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Dynamic Footer -->
+  <div id="app-footer"></div>
+  
+  <button id="backToTop" class="btn-back-top"><i class="fas fa-arrow-up"></i></button>
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Custom cart rendering for cart.html
+      const cartLayout = document.getElementById('cartLayout');
+      
+      function renderCartPage() {
+        const items = Cart.getItems();
+        
+        if (items.length === 0) {
+          cartLayout.innerHTML = `
+            <div class="cart-main" style="width: 100%; text-align: center;">
+              <div class="empty-cart-msg">
+                <i class="fas fa-shopping-basket"></i>
+                <p>Giỏ hàng của bạn đang trống</p>
+                <a href="index.html" class="btn btn-primary" style="padding: 12px 30px; border-radius: 30px;">Tiếp tục mua sắm</a>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+        const subtotal = Cart.getTotal();
+        const shipping = subtotal > 300000 ? 0 : 30000;
+        const total = subtotal + shipping;
+
+        let tableRows = '';
+        items.forEach(item => {
+          const product = window.PharmifyDB.getProductById(item.productId);
+          if (!product) return;
+          
+          const itemTotal = product.price * item.quantity;
+          
+          tableRows += `
+            <tr class="cart-item">
+              <td>
+                <div class="item-info">
+                  <img src="${product.image}" alt="${product.name}" class="item-img">
+                  <div>
+                    <a href="product.html?id=${product.id}" class="item-name">${product.name}</a>
+                    <div class="mt-5" style="font-size:13px; color:#666;">Đvt: ${product.unit}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="col-price">
+                <div class="item-price">${PharmifyDB.formatCurrency(product.price)}</div>
+                ${product.oldPrice ? `<div class="item-old-price">${PharmifyDB.formatCurrency(product.oldPrice)}</div>` : ''}
+              </td>
+              <td>
+                <div class="quantity-controls">
+                  <button onclick="updateCartItem(${product.id}, -1)"><i class="fas fa-minus"></i></button>
+                  <input type="number" value="${item.quantity}" readonly>
+                  <button onclick="updateCartItem(${product.id}, 1)"><i class="fas fa-plus"></i></button>
+                </div>
+              </td>
+              <td class="col-price">
+                <div class="item-price">${PharmifyDB.formatCurrency(itemTotal)}</div>
+              </td>
+              <td style="text-align:right;">
+                <button class="btn-remove" onclick="removeCartItem(${product.id})" title="Xóa sản phẩm">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+
+        cartLayout.innerHTML = `
+          <div class="cart-main">
+            <table class="cart-table">
+              <thead>
+                <tr>
+                  <th style="width: 45%;">Sản phẩm</th>
+                  <th class="col-price">Đơn giá</th>
+                  <th>Số lượng</th>
+                  <th class="col-price">Thành tiền</th>
+                  <th style="text-align:right;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tableRows}
+              </tbody>
+            </table>
+          </div>
+          
+          <aside class="cart-sidebar">
+            <div class="cart-summary">
+              <h3 style="font-size:18px; font-weight:700; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:15px;">Tổng tiền giỏ hàng</h3>
+              
+              <div class="summary-row">
+                <span>Tổng sản phẩm:</span>
+                <span style="font-weight:600;">${totalItems}</span>
+              </div>
+              <div class="summary-row">
+                <span>Tạm tính:</span>
+                <span style="font-weight:600;">${PharmifyDB.formatCurrency(subtotal)}</span>
+              </div>
+              <div class="summary-row">
+                <span>Phí vận chuyển:</span>
+                <span style="font-weight:600;">${shipping === 0 ? 'Miễn phí' : PharmifyDB.formatCurrency(shipping)}</span>
+              </div>
+              
+              <div class="coupon-box">
+                <input type="text" placeholder="Mã giảm giá">
+                <button>Áp dụng</button>
+              </div>
+              
+              <div class="summary-total">
+                <span>Tổng cộng:</span>
+                <span class="price">${PharmifyDB.formatCurrency(total)}</span>
+              </div>
+              <div style="text-align:right; font-size:12px; color:#999; margin-top:5px;">(Đã bao gồm VAT)</div>
+              
+              <button class="btn-checkout" onclick="alert('Tính năng đang được phát triển!')">Tiến hành đặt hàng</button>
+            </div>
+          </aside>
+        `;
+      }
+
+      // Expose globally for inline DOM handlers
+      window.updateCartItem = function(id, delta) {
+        const items = Cart.getItems();
+        const item = items.find(i => i.productId === id);
+        if (item) {
+          let newQty = item.quantity + delta;
+          if (newQty < 1) newQty = 1;
+          Cart.updateItemQuantity(id, newQty);
+          renderCartPage();
+        }
+      };
+
+      window.removeCartItem = function(id) {
+        if(confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+          Cart.removeItem(id);
+          renderCartPage();
+        }
+      };
+
+      // Listen for custom event from cart.js (if any header things change)
+      window.addEventListener('cartUpdated', renderCartPage);
+
+      // Initial render
+      renderCartPage();
+    });
+  </script>
+</body>
+</html>

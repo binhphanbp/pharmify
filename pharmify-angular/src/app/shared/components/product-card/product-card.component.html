@@ -1,0 +1,40 @@
+<a [routerLink]="['/product', product.slug]" class="product-card">
+  <!-- Image -->
+  <div class="product-image-wrapper">
+    @if (discountPercent > 0) {
+      <div class="discount-badge">-{{ discountPercent }}%</div>
+    }
+    <img
+      [src]="product.image_url || ''"
+      [alt]="product.name"
+      class="product-image"
+      onerror="
+        this.src = 'https://placehold.co/200x200/f8f9fa/ccc?text=Pharmify'
+      "
+    />
+  </div>
+
+  <!-- Info -->
+  <div class="product-info">
+    <h3 class="product-name">{{ product.name }}</h3>
+
+    <div class="product-pricing">
+      <span class="price-current">
+        {{ product.price | currency: "VND" : "symbol" : "1.0-0" }}
+      </span>
+      <span class="price-unit">/ {{ product.base_unit_name }}</span>
+    </div>
+
+    @if (product.original_price && product.original_price > product.price) {
+      <div class="price-old-row">
+        <span class="price-old">
+          {{ product.original_price | currency: "VND" : "symbol" : "1.0-0" }}
+        </span>
+      </div>
+    }
+
+    <button class="btn-buy" (click)="addToCart($event)">
+      <span class="material-icons">add</span> Chọn mua
+    </button>
+  </div>
+</a>

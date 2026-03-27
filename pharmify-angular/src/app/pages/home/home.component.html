@@ -1,0 +1,176 @@
+<div class="home-page">
+  <!-- Hero Banner Carousel -->
+  <section class="hero-banner">
+    <div class="container">
+      <swiper-container
+        navigation="true"
+        pagination="true"
+        autoplay-delay="4000"
+        loop="true"
+        class="hero-swiper"
+      >
+        <swiper-slide *ngFor="let banner of banners; let i = index">
+          <img
+            [src]="banner"
+            alt="Banner {{ i + 1 }}"
+            class="banner-img"
+            onerror="
+              this.src =
+                'https://placehold.co/1200x400/004D95/FFF?text=Ph%E1%BA%A5Mify+%E2%80%93+Nh%C3%A0+thu%E1%BB%91c+online+s%E1%BB%91+1'
+            "
+          />
+        </swiper-slide>
+      </swiper-container>
+    </div>
+  </section>
+
+  <!-- Category Icons (Danh mục tủ thuốc) -->
+  <section class="categories-section">
+    <div class="container">
+      <h2 class="section-title">
+        <span class="material-icons text-primary">grid_view</span>
+        Danh mục tủ thuốc
+      </h2>
+      <div class="category-grid">
+        @if (loadingCategories()) {
+          <div
+            *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8]"
+            class="category-item skeleton-item"
+          >
+            <div class="skeleton cat-icon-skeleton"></div>
+            <div class="skeleton cat-name-skeleton"></div>
+          </div>
+        } @else {
+          <a
+            *ngFor="let cat of categories()"
+            [routerLink]="['/category', cat.slug]"
+            class="category-item"
+          >
+            <div class="cat-icon-wrap">
+              <span class="material-icons" *ngIf="!cat.icon"
+                >local_pharmacy</span
+              >
+              <img *ngIf="cat.icon" [src]="cat.icon" [alt]="cat.name" />
+            </div>
+            <span class="cat-name">{{ cat.name }}</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Hot Products (Sản phẩm bán chạy) -->
+  <section class="product-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="material-icons text-orange">local_fire_department</span>
+          Sản phẩm bán chạy
+        </h2>
+        <a routerLink="/category" class="view-all-btn">
+          Xem tất cả <span class="material-icons">chevron_right</span>
+        </a>
+      </div>
+
+      <div class="product-grid">
+        @if (loadingProducts()) {
+          <div
+            *ngFor="let i of [1, 2, 3, 4, 5]"
+            class="skeleton product-skeleton"
+          ></div>
+        } @else {
+          <app-product-card
+            *ngFor="let product of hotProducts()"
+            [product]="product"
+          ></app-product-card>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- New Products -->
+  <section class="product-section alt-bg">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="material-icons text-green">verified</span>
+          Sản phẩm mới
+        </h2>
+        <a routerLink="/category" class="view-all-btn">
+          Xem tất cả <span class="material-icons">chevron_right</span>
+        </a>
+      </div>
+
+      <div class="product-grid">
+        @if (loadingProducts()) {
+          <div
+            *ngFor="let i of [1, 2, 3, 4, 5]"
+            class="skeleton product-skeleton"
+          ></div>
+        } @else {
+          <app-product-card
+            *ngFor="let product of newProducts()"
+            [product]="product"
+          ></app-product-card>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Brands Slider -->
+  <section class="brands-section">
+    <div class="container">
+      <h2 class="section-title">
+        <span class="material-icons text-primary">workspace_premium</span>
+        Thương hiệu nổi bật
+      </h2>
+      <div class="brand-grid">
+        <a class="brand-item" *ngFor="let brand of brands" href="#">
+          <img
+            [src]="brand.image"
+            [alt]="brand.name"
+            onerror="
+              this.src = 'https://placehold.co/120x60/fff/ccc?text=Brand'
+            "
+          />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Bar (Above Footer — Like Pharmacity) -->
+  <section class="benefits-section">
+    <div class="container">
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <span class="material-icons benefit-icon">local_shipping</span>
+          <div>
+            <strong>Giao nhanh miễn phí</strong>
+            <span>Từ 2h - Tại khu vực nội thành</span>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <span class="material-icons benefit-icon">verified_user</span>
+          <div>
+            <strong>Cam kết 100% chính hãng</strong>
+            <span>Đàm bảo chất lượng sản phẩm</span>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <span class="material-icons benefit-icon">swap_horiz</span>
+          <div>
+            <strong>Đổi trả trong 30 ngày</strong>
+            <span>Kể từ ngày mua hàng</span>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <span class="material-icons benefit-icon">support_agent</span>
+          <div>
+            <strong>Tư vấn chuyên nghiệp</strong>
+            <span>Đội ngũ Dược sĩ tận tâm</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

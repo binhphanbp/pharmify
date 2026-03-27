@@ -1,0 +1,287 @@
+/* ===========================
+   Pharmify — Global Design System
+   Faithful clone of Pharmacity.vn
+   =========================== */
+
+:root {
+  /* Colors — Exact Pharmacity Palette */
+  --primary-blue: #004d95;
+  --secondary-blue: #0072bc;
+  --dark-blue: #003366;
+  --light-blue: #ebf5ff;
+  --accent-orange: #f26522;
+  --accent-red: #e53935;
+  --accent-green: #00b14f;
+  --light-orange: #fff4ec;
+
+  --bg-color: #f5f7fa;
+  --surface-color: #ffffff;
+
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --text-light: #999999;
+  --text-white: #ffffff;
+
+  --border-color: #e8ecf0;
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-pill: 50px;
+
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+  --container-width: 1200px;
+  --header-height: 64px;
+}
+
+/* === Reset === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif !important;
+  background-color: var(--bg-color) !important;
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none !important;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* === Bootstrap Overrides === */
+.bg-primary {
+  background-color: var(--primary-blue) !important;
+}
+.bg-white {
+  background-color: var(--surface-color) !important;
+}
+.text-primary {
+  color: var(--primary-blue) !important;
+}
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+.text-white {
+  color: #fff !important;
+}
+.btn-primary {
+  background-color: var(--primary-blue) !important;
+  border-color: var(--primary-blue) !important;
+  &:hover {
+    background-color: var(--dark-blue) !important;
+    border-color: var(--dark-blue) !important;
+  }
+}
+
+/* === Container === */
+.container {
+  max-width: var(--container-width) !important;
+  margin: 0 auto;
+  padding: 0 16px;
+  width: 100%;
+}
+
+/* === Typography === */
+.font-semibold {
+  font-weight: 600 !important;
+}
+.font-bold {
+  font-weight: 700 !important;
+}
+.text-orange {
+  color: var(--accent-orange) !important;
+}
+.text-green {
+  color: var(--accent-green) !important;
+}
+.text-red {
+  color: var(--accent-red) !important;
+}
+.text-sm {
+  font-size: 12px !important;
+}
+.text-lg {
+  font-size: 18px !important;
+}
+
+/* === Buttons === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: var(--border-radius) !important;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  gap: 6px;
+  border: none;
+  font-family: inherit;
+}
+
+.btn-pharmify {
+  background: var(--primary-blue);
+  color: white;
+  border-radius: var(--border-radius-pill) !important;
+  &:hover {
+    background: var(--dark-blue);
+    transform: translateY(-1px);
+  }
+}
+
+.btn-outline-pharmify {
+  border: 1.5px solid var(--secondary-blue);
+  color: var(--secondary-blue);
+  background: white;
+  border-radius: 20px !important;
+  font-size: 13px;
+  padding: 6px 16px;
+  &:hover {
+    background: var(--light-blue);
+  }
+}
+
+.btn-orange {
+  background: var(--accent-orange) !important;
+  color: white !important;
+  border-radius: 20px !important;
+  &:hover {
+    background: #d95a1b !important;
+  }
+}
+
+/* === Cards === */
+.card {
+  background: var(--surface-color);
+  border-radius: var(--border-radius-lg) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: none;
+  transition: all 0.25s ease;
+  overflow: hidden;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* === Sections === */
+.section-padding {
+  padding: 32px 0;
+}
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* === Form Controls === */
+.form-control {
+  font-family: inherit !important;
+  font-size: 14px !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius) !important;
+  &:focus {
+    border-color: var(--secondary-blue) !important;
+    box-shadow: 0 0 0 3px rgba(0, 77, 149, 0.1) !important;
+    outline: none !important;
+  }
+}
+
+/* === Truncate === */
+.truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+  &:hover {
+    background: #999;
+  }
+}
+
+/* === Skeleton Loading === */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 2000px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--border-radius);
+}
+
+/* === Swiper Custom Styles === */
+swiper-container {
+  --swiper-theme-color: var(--primary-blue);
+  --swiper-navigation-size: 28px;
+  --swiper-pagination-bullet-size: 8px;
+  --swiper-pagination-bullet-inactive-color: rgba(255, 255, 255, 0.5);
+}
+
+swiper-container::part(button-prev),
+swiper-container::part(button-next) {
+  background: rgba(255, 255, 255, 0.9);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  color: var(--primary-blue);
+}

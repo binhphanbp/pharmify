@@ -1,0 +1,57 @@
+<div class="auth-page bg-light min-vh-100 d-flex align-items-center justify-content-center py-5">
+  <div class="container">
+    <div class="row justify-content-center m-0">
+      <div class="col-12 col-md-6 col-lg-5">
+        <div class="card bg-white p-4 p-md-5 shadow-sm border-0" style="border-radius: 16px;">
+          
+          <div class="text-center mb-4">
+            <h1 class="font-bold text-primary mb-2">{{ isLoginMode() ? 'Đăng nhập' : 'Đăng ký' }}</h1>
+            <p class="text-secondary">Chào mừng bạn đến với Pharmify</p>
+          </div>
+
+          @if (errorMessage()) {
+            <div class="alert bg-orange text-white p-3 rounded mb-4 text-sm max-w-100 truncate-2">
+              {{ errorMessage() }}
+            </div>
+          }
+
+          <form (ngSubmit)="onSubmit()">
+            
+            @if (!isLoginMode()) {
+              <div class="mb-3">
+                <label class="font-semibold mb-2 d-block">Họ và tên</label>
+                <input type="text" class="form-control" name="fullName" [(ngModel)]="fullName" required placeholder="Nhập họ và tên" />
+              </div>
+            }
+
+            <div class="mb-3">
+              <label class="font-semibold mb-2 d-block">Email</label>
+              <input type="email" class="form-control" name="email" [(ngModel)]="email" required placeholder="Nhập địa chỉ email" />
+            </div>
+
+            <div class="mb-4">
+              <label class="font-semibold mb-2 d-block">Mật khẩu</label>
+              <input type="password" class="form-control" name="password" [(ngModel)]="password" required placeholder="Nhập mật khẩu" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-3" style="font-size: 16px; border-radius: 8px;" [disabled]="loading()">
+              @if (loading()) {
+                <span class="material-icons rotating me-2" style="font-size: 20px;">autorenew</span> Đang xử lý...
+              } @else {
+                {{ isLoginMode() ? 'Đăng nhập' : 'Đăng ký' }}
+              }
+            </button>
+          </form>
+
+          <div class="text-center mt-4 text-sm">
+            <span class="text-secondary">{{ isLoginMode() ? 'Chưa có tài khoản?' : 'Đã có tài khoản?' }}</span>
+            <button class="btn btn-link text-primary font-semibold ms-1 p-0" (click)="toggleMode()">
+              {{ isLoginMode() ? 'Đăng ký ngay' : 'Đăng nhập' }}
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

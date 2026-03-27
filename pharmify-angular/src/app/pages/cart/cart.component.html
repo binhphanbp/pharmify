@@ -1,0 +1,92 @@
+<div class="cart-page bg-light section-padding min-vh-100">
+  <div class="container">
+    <h1 class="font-bold text-primary mb-4" style="font-size: 24px;">Giỏ hàng ({{ itemCount() }} sản phẩm)</h1>
+
+    @if (itemCount() === 0) {
+      <div class="card bg-white p-5 text-center border">
+        <span class="material-icons text-light mb-3" style="font-size: 64px;">shopping_cart</span>
+        <h3 class="font-bold text-secondary mb-3">Giỏ hàng của bạn đang trống</h3>
+        <a routerLink="/" class="btn btn-primary px-4 py-2">Tiếp tục mua sắm</a>
+      </div>
+    } @else {
+      <div class="row">
+        <!-- Cart Items -->
+        <div class="col-12 col-lg-8 mb-4">
+          <div class="card bg-white p-4 border">
+            <!-- Headers -->
+            <div class="d-none d-md-flex text-secondary text-sm font-semibold pb-3 border-bottom mb-3">
+              <div class="col-5">Sản phẩm</div>
+              <div class="col-3 text-center">Đơn giá</div>
+              <div class="col-2 text-center">Số lượng</div>
+              <div class="col-2 text-end">Thành tiền</div>
+            </div>
+
+            <!-- Item List -->
+            @for (item of summary()?.items; track item.product_id + item.unit_id) {
+              <div class="cart-item d-flex flex-wrap align-items-center py-3 border-bottom">
+                <div class="col-12 col-md-5 d-flex gap-3 mb-3 mb-md-0">
+                  <div class="d-flex flex-column">
+                    <a [routerLink]="['/product', item.product_id]" class="font-semibold text-primary truncate-2 mb-1" style="font-size: 15px;">
+                      {{ item.product_name || 'Đang tải...' }}
+                    </a>
+                    <span class="text-secondary text-sm">Đơn vị: {{ item.unit_name || item.unit_id }}</span>
+                    <button class="btn btn-link text-orange text-sm p-0 m-0 w-auto d-inline text-start mt-2" (click)="removeItem(item.product_id, item.unit_id)">
+                      Xóa
+                    </button>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-3 text-md-center mb-2 mb-md-0 font-semibold">
+                  {{ (item.unit_price || 0) | currency:'VND':'symbol':'1.0-0' }}
+                </div>
+
+                <div class="col-6 col-md-2 d-flex justify-content-md-center">
+                  <div class="qty-control d-flex align-items-center border rounded">
+                    <button class="btn btn-qty px-2 py-1" (click)="updateQty(item.product_id, item.unit_id, item.quantity - 1)">-</button>
+                    <input type="number" class="form-control text-center border-0 p-1" style="width: 40px;" [value]="item.quantity" readonly />
+                    <button class="btn btn-qty px-2 py-1" (click)="updateQty(item.product_id, item.unit_id, item.quantity + 1)">+</button>
+                  </div>
+                </div>
+
+                <div class="col-6 col-md-2 text-end font-bold text-primary">
+                  {{ (item.subtotal || 0) | currency:'VND':'symbol':'1.0-0' }}
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Summary & Checkout -->
+        <div class="col-12 col-lg-4">
+          <div class="card bg-white p-4 border position-sticky" style="top: 20px;">
+            <h3 class="font-bold mb-4" style="font-size: 18px;">Tổng tiền giỏ hàng</h3>
+            
+            <div class="summary-line d-flex justify-content-between mb-3 text-secondary">
+              <span>Tạm tính</span>
+              <span>{{ (summary()?.total_amount || 0) | currency:'VND':'symbol':'1.0-0' }}</span>
+            </div>
+
+            <!-- Coupon mockup -->
+            <div class="input-group mb-4 d-flex">
+              <input type="text" class="form-control rounded-start" placeholder="Mã giảm giá">
+              <button class="btn btn-outline border-start-0 rounded-end px-3">Áp dụng</button>
+            </div>
+
+            <hr class="text-light my-3">
+
+            <div class="summary-line d-flex justify-content-between align-items-center mb-4">
+              <span class="font-semibold">Tổng cộng</span>
+              <span class="text-primary font-bold" style="font-size: 24px;">
+                {{ ((summary()?.final_total) || (summary()?.total_amount || 0)) | currency:'VND':'symbol':'1.0-0' }}
+              </span>
+            </div>
+
+            <button class="btn btn-orange w-100 py-3" style="font-size: 16px; border-radius: 8px;">
+              Tiến hành đặt hàng
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
