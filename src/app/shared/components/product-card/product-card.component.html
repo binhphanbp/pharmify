@@ -1,8 +1,8 @@
 <a [routerLink]="['/product', product.slug]" class="product-card">
-  <!-- Image -->
+  <!-- Image Area -->
   <div class="product-image-wrapper">
     @if (discountPercent > 0) {
-      <div class="discount-badge">-{{ discountPercent }}%</div>
+      <span class="discount-badge">Giảm {{ discountPercent }}%</span>
     }
     <img
       [src]="product.image_url || ''"
@@ -14,27 +14,33 @@
     />
   </div>
 
-  <!-- Info -->
+  <!-- Product Info -->
   <div class="product-info">
     <h3 class="product-name">{{ product.name }}</h3>
 
     <div class="product-pricing">
-      <span class="price-current">
-        {{ product.price | currency: "VND" : "symbol" : "1.0-0" }}
-      </span>
-      <span class="price-unit">/ {{ product.base_unit_name }}</span>
+      <span class="price-current"> {{ product.price | number: "1.0-0" }} đ</span
+      ><span class="price-unit">/{{ product.base_unit_name }}</span>
     </div>
 
     @if (product.original_price && product.original_price > product.price) {
       <div class="price-old-row">
         <span class="price-old">
-          {{ product.original_price | currency: "VND" : "symbol" : "1.0-0" }}
+          {{ product.original_price | number: "1.0-0" }} đ
         </span>
       </div>
     }
 
-    <button class="btn-buy" (click)="addToCart($event)">
+    <button class="btn-buy" (click)="openQuickView($event)">
       <span class="material-icons">add</span> Chọn mua
     </button>
   </div>
 </a>
+
+<!-- Quick View Modal -->
+@if (showQuickView) {
+  <app-quick-view-modal
+    [product]="product"
+    (close)="closeQuickView()"
+  ></app-quick-view-modal>
+}

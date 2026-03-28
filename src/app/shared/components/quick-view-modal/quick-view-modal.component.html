@@ -1,0 +1,105 @@
+<div class="qv-overlay" (click)="onOverlayClick($event)">
+  <div class="qv-dialog">
+    <!-- Close Button -->
+    <button class="qv-close" (click)="close.emit()">
+      <span class="material-icons">close</span>
+    </button>
+
+    <!-- Title -->
+    <h2 class="qv-title">Chọn sản phẩm</h2>
+
+    <div class="qv-body">
+      <!-- Left: Product Image -->
+      <div class="qv-image-wrap">
+        @if (discountPercent) {
+          <span class="qv-discount-badge">Giảm {{ discountPercent }}%</span>
+        }
+        <img
+          [src]="product.image_url || ''"
+          [alt]="product.name"
+          class="qv-image"
+          onerror="
+            this.src = 'https://placehold.co/300x300/f8f9fa/ccc?text=Pharmify'
+          "
+        />
+      </div>
+
+      <!-- Right: Product Info -->
+      <div class="qv-info">
+        <!-- Free shipping note -->
+        <p class="qv-free-ship">
+          <span class="material-icons">local_shipping</span>
+          Miễn phí vận chuyển cho mọi đơn hàng 0đ
+        </p>
+
+        <!-- Product Name -->
+        <h3 class="qv-product-name">{{ product.name }}</h3>
+
+        <!-- Price -->
+        <div class="qv-price-row">
+          <span class="qv-price">{{ currentPrice | number: "1.0-0" }} đ</span>
+          <span class="qv-price-unit">/{{ currentUnitName }}</span>
+        </div>
+
+        @if (originalPrice) {
+          <div class="qv-old-price-row">
+            <span class="qv-old-price"
+              >{{ originalPrice | number: "1.0-0" }} đ</span
+            >
+          </div>
+        }
+
+        <p class="qv-price-note">
+          Giá đã bao gồm thuế. Phí vận chuyển và các chi phí khác (nếu có) sẽ
+          được thể hiện khi đặt hàng.
+        </p>
+
+        <!-- Unit Selection -->
+        @if (units.length > 1) {
+          <div class="qv-units-section">
+            <p class="qv-section-label">Phân loại sản phẩm</p>
+            <div class="qv-unit-options">
+              @for (unit of units; track unit.unit_id || unit.id) {
+                <button
+                  class="qv-unit-btn"
+                  [class.active]="
+                    (unit.unit_id || unit.id) === selectedUnitId()
+                  "
+                  (click)="selectUnit(unit.unit_id || unit.id)"
+                >
+                  {{ unit.unit_name }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Quantity -->
+        <div class="qv-quantity-section">
+          <p class="qv-section-label">Số lượng</p>
+          <div class="qv-quantity-control">
+            <button
+              class="qv-qty-btn"
+              (click)="decreaseQty()"
+              [disabled]="quantity() <= 1"
+            >
+              <span class="material-icons">remove</span>
+            </button>
+            <span class="qv-qty-value">{{ quantity() }}</span>
+            <button class="qv-qty-btn" (click)="increaseQty()">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="qv-actions">
+          <button class="qv-btn qv-btn-cart" (click)="addToCart()">
+            Thêm vào giỏ
+          </button>
+          <button class="qv-btn qv-btn-buy" (click)="buyNow()">Mua ngay</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

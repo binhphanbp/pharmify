@@ -1,27 +1,29 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Product } from '../../../core/models/product.model';
-import { CartService } from '../../../core/services/cart.service';
+import { QuickViewModalComponent } from '../quick-view-modal/quick-view-modal.component';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, DecimalPipe, QuickViewModalComponent],
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.scss'],
 })
 export class ProductCardComponent {
   @Input({ required: true }) product!: Product;
 
-  constructor(private cartService: CartService) {}
+  showQuickView = false;
 
-  addToCart(event: Event) {
+  openQuickView(event: Event) {
     event.preventDefault();
     event.stopPropagation();
-    if (this.product.base_unit_id) {
-      this.cartService.addToCart(this.product.id, this.product.base_unit_id);
-    }
+    this.showQuickView = true;
+  }
+
+  closeQuickView() {
+    this.showQuickView = false;
   }
 
   get discountPercent(): number {

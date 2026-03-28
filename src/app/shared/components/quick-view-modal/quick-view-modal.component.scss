@@ -1,0 +1,338 @@
+/* ===== Quick View Modal — Pharmacity Style ===== */
+
+.qv-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.qv-dialog {
+  background: white;
+  border-radius: 16px;
+  width: 720px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+.qv-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f5f5f5;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  .material-icons {
+    font-size: 20px;
+  }
+
+  &:hover {
+    background: #e0e0e0;
+    color: #333;
+  }
+}
+
+.qv-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 20px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.qv-body {
+  display: flex;
+  gap: 24px;
+}
+
+/* Image Area */
+.qv-image-wrap {
+  flex: 0 0 260px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+}
+
+.qv-image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.qv-discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #e53935;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  z-index: 2;
+}
+
+/* Info Area */
+.qv-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.qv-free-ship {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #0072bc;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 0 8px;
+
+  .material-icons {
+    font-size: 16px;
+  }
+}
+
+.qv-product-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.5;
+  margin: 0 0 12px;
+}
+
+/* Pricing */
+.qv-price-row {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+
+.qv-price {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0072bc;
+}
+
+.qv-price-unit {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0072bc;
+}
+
+.qv-old-price-row {
+  margin-bottom: 4px;
+}
+
+.qv-old-price {
+  font-size: 13px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.qv-price-note {
+  font-size: 12px;
+  color: #888;
+  line-height: 1.5;
+  margin: 6px 0 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Unit Selection */
+.qv-units-section {
+  margin-bottom: 16px;
+}
+
+.qv-section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin: 0 0 8px;
+}
+
+.qv-unit-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.qv-unit-btn {
+  padding: 6px 18px;
+  border: 1.5px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #0072bc;
+    color: #0072bc;
+  }
+
+  &.active {
+    border-color: #0072bc;
+    background: #e6f0ff;
+    color: #0072bc;
+    font-weight: 600;
+  }
+}
+
+/* Quantity */
+.qv-quantity-section {
+  margin-bottom: 20px;
+}
+
+.qv-quantity-control {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.qv-qty-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #fafafa;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+
+  .material-icons {
+    font-size: 18px;
+  }
+
+  &:hover:not(:disabled) {
+    background: #eee;
+  }
+
+  &:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.qv-qty-value {
+  width: 44px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  line-height: 36px;
+}
+
+/* Action Buttons */
+.qv-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.qv-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qv-btn-cart {
+  background: white;
+  border: 1.5px solid #0072bc;
+  color: #0072bc;
+
+  &:hover {
+    background: #f0f7ff;
+  }
+}
+
+.qv-btn-buy {
+  background: #0072bc;
+  color: white;
+
+  &:hover {
+    background: #005a96;
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .qv-dialog {
+    padding: 20px;
+  }
+
+  .qv-body {
+    flex-direction: column;
+  }
+
+  .qv-image-wrap {
+    flex: none;
+    width: 100%;
+    max-height: 250px;
+  }
+}
