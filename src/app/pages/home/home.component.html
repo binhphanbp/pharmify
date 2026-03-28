@@ -105,63 +105,30 @@
     </div>
   </section>
 
-  <!-- 5 Quick Action Badges -->
-  <section class="quick-badges-section">
-    <div class="container">
-      <div class="badges-grid">
-        <a href="#" class="badge-item bg-pink-light">
-          <div class="badge-icon-wrap">
-            <span class="material-icons icon-pink">medication</span>
-          </div>
-          <span class="badge-text">Tư vấn mua<br />thuốc</span>
-        </a>
-        <a href="#" class="badge-item bg-blue-lighter">
-          <div class="badge-icon-wrap">
-            <span class="material-icons icon-blue">support_agent</span>
-          </div>
-          <span class="badge-text">Liên hệ dược sĩ</span>
-        </a>
-        <a href="#" class="badge-item bg-green-light">
-          <div class="badge-icon-wrap">
-            <span class="material-icons icon-green">storefront</span>
-          </div>
-          <span class="badge-text">Hệ thống nhà<br />thuốc</span>
-        </a>
-        <a href="#" class="badge-item bg-orange-light">
-          <div class="badge-icon-wrap">
-            <span class="material-icons icon-orange">local_offer</span>
-          </div>
-          <span class="badge-text">Mã giảm giá<br />riêng</span>
-        </a>
-        <a href="#" class="badge-item bg-teal-light has-arrow">
-          <div class="badge-icon-wrap">
-            <span class="material-icons icon-teal">health_and_safety</span>
-          </div>
-          <span class="badge-text">Kiểm tra sức<br />khỏe</span>
-          <span class="material-icons arrow">chevron_right</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
   <!-- Sub Banners Carousel (Like Pharmacity promotions) -->
   @if (subBanners().length > 0) {
     <section class="sub-banners">
-      <div class="container">
-        <div class="sub-banner-grid">
+      <div class="container relative">
+        <swiper-container
+          #subBannersSwiper
+          init="false"
+          class="sub-banner-swiper"
+        >
           @for (banner of subBanners(); track banner.id) {
-            <a [routerLink]="banner.link_url || '/'" class="sub-banner-item">
-              <img
-                [src]="banner.image_url"
-                [alt]="banner.title"
-                onerror="
-                  this.src =
-                    'https://placehold.co/600x300/0072BC/FFF?text=Pharmify+Sale'
-                "
-              />
-            </a>
+            <swiper-slide>
+              <a [routerLink]="banner.link_url || '/'" class="sub-banner-item">
+                <img
+                  [src]="banner.image_url"
+                  [alt]="banner.title"
+                  onerror="
+                    this.src =
+                      'https://placehold.co/600x300/0072BC/FFF?text=Pharmify+Sale'
+                  "
+                />
+              </a>
+            </swiper-slide>
           }
-        </div>
+        </swiper-container>
       </div>
     </section>
   }

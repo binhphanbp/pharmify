@@ -29,6 +29,7 @@ register();
 })
 export class HomeComponent implements OnInit {
   @ViewChild('heroSwiper') heroSwiperRef!: ElementRef;
+  @ViewChild('subBannersSwiper') subBannersSwiperRef!: ElementRef;
 
   // Data signals
   heroBanners = signal<Banner[]>([]);
@@ -73,16 +74,75 @@ export class HomeComponent implements OnInit {
   initSwiper() {
     // Wait for Angular to render the slides, then initialize Swiper
     setTimeout(() => {
-      const swiperEl = this.heroSwiperRef?.nativeElement;
-      if (swiperEl) {
-        Object.assign(swiperEl, {
+      const heroSwiperEl = this.heroSwiperRef?.nativeElement;
+      if (heroSwiperEl) {
+        Object.assign(heroSwiperEl, {
           slidesPerView: 1,
           loop: true,
           autoplay: { delay: 4000, disableOnInteraction: false },
-          pagination: { clickable: true },
+          pagination: false,
           navigation: true,
         });
-        swiperEl.initialize();
+        heroSwiperEl.initialize();
+      }
+
+      const subSwiperEl = this.subBannersSwiperRef?.nativeElement;
+      if (subSwiperEl) {
+        Object.assign(subSwiperEl, {
+          slidesPerView: 2,
+          slidesPerGroup: 2,
+          spaceBetween: 16,
+          loop: true,
+          autoplay: { delay: 5000, disableOnInteraction: false },
+          pagination: { clickable: true },
+          navigation: true,
+          injectStyles: [
+            `
+            :host {
+              --swiper-theme-color: #0072bc;
+            }
+            .swiper-wrapper {
+              padding-bottom: 50px; /* Create 50px empty vertical space below the banner images */
+            }
+            .swiper-pagination-bullets {
+              background: #f0f2f5;
+              padding: 4px 10px;
+              border-radius: 16px;
+              display: inline-flex !important;
+              align-items: center;
+              left: 50% !important;
+              transform: translateX(-50%) !important;
+              width: auto !important;
+            }
+            .swiper-pagination-bullet {
+              width: 6px;
+              height: 6px;
+              background: #aab2bd;
+              opacity: 1;
+              margin: 0 3px !important;
+              transition: all 0.3s;
+            }
+            .swiper-pagination-bullet-active {
+              background: #333;
+              width: 6px;
+              border-radius: 50%;
+            }
+          `,
+          ],
+          breakpoints: {
+            320: {
+              slidesPerView: 1,
+              slidesPerGroup: 1,
+              spaceBetween: 10,
+            },
+            768: {
+              slidesPerView: 2,
+              slidesPerGroup: 2,
+              spaceBetween: 16,
+            },
+          },
+        });
+        subSwiperEl.initialize();
       }
     }, 100);
   }

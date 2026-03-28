@@ -11,16 +11,15 @@
    Blue gradient bg wrapping: Banner + Search + Quick Links
    ============================================= */
 .hero-section {
-  background: url("/background.webp") no-repeat center top;
+  background: url("/background.webp") no-repeat center center;
   background-size: cover;
-  padding: 0 0 20px;
+  padding: 0;
 }
 
 /* Hero Banner */
 .hero-banner-wrap {
   position: relative;
   padding: 16px 0 0;
-  padding-bottom: 120px; /* space for the overlapping search panel */
 }
 
 .hero-swiper {
@@ -130,10 +129,8 @@ swiper-slide {
 
 /* ===== Pharmacity-style Hero Search Panel ===== */
 .hero-search-panel {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%) translateY(40%);
+  position: relative;
+  margin: 0px auto 0;
   width: 95%;
   max-width: 920px;
   background: white;
@@ -264,7 +261,7 @@ swiper-slide {
 
 /* ===== 5 Quick Action Badges ===== */
 .quick-badges-section {
-  padding: 60px 0 30px; /* padding to clear overlapping search panel */
+  padding: 30px 0;
   background: var(--bg-color);
 }
 
@@ -367,35 +364,93 @@ swiper-slide {
 
 /* ===== Sub Banners ===== */
 .sub-banners {
-  padding: 20px 0;
+  padding-top: 40px;
+  padding-bottom: 20px;
   background: var(--bg-color);
 }
 
-.sub-banner-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+.sub-banner-swiper {
+  box-sizing: border-box;
+  width: calc(100% + 40px);
+  margin: 0 -20px;
+  padding: 0 20px 0px; /* Remove bottom padding to let the internal wrapper handle it */
 
-  @media (max-width: 576px) {
-    grid-template-columns: 1fr;
+  --swiper-navigation-color: var(--primary-blue);
+  --swiper-navigation-size: 18px;
+  --swiper-pagination-color: #333;
+
+  &::part(button-prev),
+  &::part(button-next) {
+    background-color: rgba(255, 255, 255, 0.98);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--primary-blue);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: transparent;
+    background-size: 14px;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Offset vertically by half the arrow height plus half the new 50px bottom space */
+    margin-top: -46px !important;
   }
+
+  &::part(button-prev) {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230072bc' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E");
+    left: 30px !important;
+  }
+
+  &::part(button-next) {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230072bc' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E");
+    right: 30px !important;
+  }
+
+  &::part(button-prev):hover,
+  &::part(button-next):hover {
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &::part(pagination) {
+    /* This applies to the pagination container */
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 4px 8px;
+    display: inline-flex;
+    width: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10px; /* Centers the pill within the newly added 50px empty space */
+  }
+}
+
+/* Fix container overflow clipping for Swiper navigation */
+.sub-banners .container {
+  overflow: visible;
 }
 
 .sub-banner-item {
   display: block;
-  border-radius: 14px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Softer shadow */
   transition: all 0.3s ease;
+  width: 100%;
+  height: 100%;
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); /* Softer shadow hover */
   }
 
   img {
     width: 100%;
-    height: 200px;
+    height: 100%;
+    min-height: 180px; /* Slightly lower height to match image 2 proportions */
     object-fit: cover;
     display: block;
     transition: transform 0.4s ease;
