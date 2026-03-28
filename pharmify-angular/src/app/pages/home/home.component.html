@@ -7,109 +7,139 @@
         @if (loadingBanners()) {
           <div class="banner-skeleton skeleton"></div>
         } @else if (heroBanners().length > 0) {
-          <swiper-container
-            navigation="true"
-            pagination="true"
-            autoplay-delay="4000"
-            loop="true"
-            class="hero-swiper"
-          >
-            <swiper-slide *ngFor="let banner of heroBanners()">
-              <a [routerLink]="banner.link_url || '/'" class="banner-slide">
-                <img
-                  [src]="banner.image_url"
-                  [alt]="banner.title"
-                  class="banner-img"
-                  onerror="
-                    this.src =
-                      'https://placehold.co/1200x400/004D95/FFF?text=Pharmify'
-                  "
-                />
-                <div class="banner-overlay">
-                  <h2 class="banner-title">{{ banner.title }}</h2>
-                  <p class="banner-subtitle" *ngIf="banner.subtitle">
-                    {{ banner.subtitle }}
-                  </p>
-                  <span class="banner-cta">Tìm hiểu ngay</span>
-                </div>
-              </a>
-            </swiper-slide>
+          <swiper-container #heroSwiper init="false" class="hero-swiper">
+            @for (banner of heroBanners(); track banner.id) {
+              <swiper-slide>
+                <a [routerLink]="banner.link_url || '/'" class="banner-slide">
+                  <img
+                    [src]="banner.image_url"
+                    [alt]="banner.title"
+                    class="banner-img"
+                    onerror="
+                      this.src =
+                        'https://placehold.co/1200x400/004D95/FFF?text=Pharmify'
+                    "
+                  />
+                </a>
+              </swiper-slide>
+            }
           </swiper-container>
         }
 
-        <!-- Search bar sits at bottom edge of the banner -->
-        <div class="hero-search-wrap">
-          <div class="hero-search-bar">
+        <!-- Pharmacity-style Hero Search Panel -->
+        <div class="hero-search-panel">
+          <!-- Row 1: Search -->
+          <div class="search-input-row">
             <span class="material-icons search-icon">search</span>
             <input
+              #homeSearch
               type="text"
               placeholder="Bạn đang tìm gì hôm nay..."
-              (input)="onSearchInput($event)"
-              class="search-input"
+              (keydown.enter)="onSearch(homeSearch)"
             />
           </div>
-          <div class="search-tags">
-            <a
-              routerLink="/search"
-              [queryParams]="{ q: 'khẩu trang' }"
-              class="search-tag"
+
+          <div class="panel-divider"></div>
+
+          <!-- Row 2: Tags -->
+          <div class="search-tags-row">
+            <a routerLink="/search" [queryParams]="{ q: 'khẩu trang' }"
               >khẩu trang</a
             >
-            <a
-              routerLink="/search"
-              [queryParams]="{ q: 'sữa dinh dưỡng' }"
-              class="search-tag"
+            <a routerLink="/search" [queryParams]="{ q: 'sữa dinh dưỡng' }"
               >sữa dinh dưỡng</a
             >
-            <a
-              routerLink="/search"
-              [queryParams]="{ q: 'collagen' }"
-              class="search-tag"
+            <a routerLink="/search" [queryParams]="{ q: 'collagen' }"
               >collagen</a
             >
-            <a
-              routerLink="/search"
-              [queryParams]="{ q: 'mặt nạ' }"
-              class="search-tag"
-              >mặt nạ</a
-            >
+            <a routerLink="/search" [queryParams]="{ q: 'mặt nạ' }">mặt nạ</a>
             <a
               routerLink="/search"
               [queryParams]="{ q: 'thực phẩm bảo vệ sức khỏe' }"
-              class="search-tag"
-              >thực phẩm bảo vệ sức khỏe</a
+              >Thực phẩm bảo vệ sức khỏe</a
             >
-            <a
-              routerLink="/search"
-              [queryParams]="{ q: 'probiotics' }"
-              class="search-tag"
+            <a routerLink="/search" [queryParams]="{ q: 'probiotics' }"
               >probiotics</a
             >
-            <a
-              routerLink="/search"
-              [queryParams]="{ q: 'Mua 1 Tặng 1' }"
-              class="search-tag"
+            <a routerLink="/search" [queryParams]="{ q: 'Mua 1 Tặng 1' }"
               >Mua 1 Tặng 1</a
             >
           </div>
-          <div class="quick-actions">
-            <a routerLink="/category/thuoc" class="quick-action-item">
-              <span class="material-icons">medication</span>
-              <span>Đặt đơn thuốc</span>
-              <span class="material-icons chevron">chevron_right</span>
+
+          <div class="panel-divider"></div>
+
+          <!-- Row 3: Quick Actions -->
+          <div class="quick-actions-row">
+            <a routerLink="/category/thuoc" class="action-item">
+              <div class="icon-text">
+                <div class="icon-bg bg-blue-light">
+                  <span class="material-icons icon-blue">vaccines</span>
+                </div>
+                <span class="text-dark">Đặt đơn thuốc</span>
+              </div>
+              <span class="material-icons arrow">chevron_right</span>
             </a>
-            <a href="#" class="quick-action-item">
-              <span class="material-icons">support_agent</span>
-              <span>Liên hệ dược sĩ</span>
-              <span class="material-icons chevron">chevron_right</span>
+            <div class="v-divider"></div>
+            <a href="#" class="action-item">
+              <div class="icon-text">
+                <div class="icon-bg bg-blue-light">
+                  <span class="material-icons icon-blue">support_agent</span>
+                </div>
+                <span class="text-dark">Liên hệ dược sĩ</span>
+              </div>
+              <span class="material-icons arrow">chevron_right</span>
             </a>
-            <a href="#" class="quick-action-item">
-              <span class="material-icons">location_on</span>
-              <span>Tìm nhà thuốc</span>
-              <span class="material-icons chevron">chevron_right</span>
+            <div class="v-divider"></div>
+            <a href="#" class="action-item">
+              <div class="icon-text">
+                <div class="icon-bg bg-blue-light">
+                  <span class="material-icons icon-blue">storefront</span>
+                </div>
+                <span class="text-dark">Tìm nhà thuốc</span>
+              </div>
+              <span class="material-icons arrow">chevron_right</span>
             </a>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 Quick Action Badges -->
+  <section class="quick-badges-section">
+    <div class="container">
+      <div class="badges-grid">
+        <a href="#" class="badge-item bg-pink-light">
+          <div class="badge-icon-wrap">
+            <span class="material-icons icon-pink">medication</span>
+          </div>
+          <span class="badge-text">Tư vấn mua<br />thuốc</span>
+        </a>
+        <a href="#" class="badge-item bg-blue-lighter">
+          <div class="badge-icon-wrap">
+            <span class="material-icons icon-blue">support_agent</span>
+          </div>
+          <span class="badge-text">Liên hệ dược sĩ</span>
+        </a>
+        <a href="#" class="badge-item bg-green-light">
+          <div class="badge-icon-wrap">
+            <span class="material-icons icon-green">storefront</span>
+          </div>
+          <span class="badge-text">Hệ thống nhà<br />thuốc</span>
+        </a>
+        <a href="#" class="badge-item bg-orange-light">
+          <div class="badge-icon-wrap">
+            <span class="material-icons icon-orange">local_offer</span>
+          </div>
+          <span class="badge-text">Mã giảm giá<br />riêng</span>
+        </a>
+        <a href="#" class="badge-item bg-teal-light has-arrow">
+          <div class="badge-icon-wrap">
+            <span class="material-icons icon-teal">health_and_safety</span>
+          </div>
+          <span class="badge-text">Kiểm tra sức<br />khỏe</span>
+          <span class="material-icons arrow">chevron_right</span>
+        </a>
       </div>
     </div>
   </section>
@@ -119,20 +149,18 @@
     <section class="sub-banners">
       <div class="container">
         <div class="sub-banner-grid">
-          <a
-            *ngFor="let banner of subBanners()"
-            [routerLink]="banner.link_url || '/'"
-            class="sub-banner-item"
-          >
-            <img
-              [src]="banner.image_url"
-              [alt]="banner.title"
-              onerror="
-                this.src =
-                  'https://placehold.co/600x300/0072BC/FFF?text=Pharmify+Sale'
-              "
-            />
-          </a>
+          @for (banner of subBanners(); track banner.id) {
+            <a [routerLink]="banner.link_url || '/'" class="sub-banner-item">
+              <img
+                [src]="banner.image_url"
+                [alt]="banner.title"
+                onerror="
+                  this.src =
+                    'https://placehold.co/600x300/0072BC/FFF?text=Pharmify+Sale'
+                "
+              />
+            </a>
+          }
         </div>
       </div>
     </section>
@@ -140,93 +168,137 @@
 
   <!-- Category Icons (Danh mục tủ thuốc) -->
   <section class="categories-section">
-    <div class="container">
-      <h2 class="section-title">
-        <span class="material-icons text-primary">grid_view</span>
-        Danh mục tủ thuốc
-      </h2>
-      <div class="category-grid">
-        @if (loadingCategories()) {
-          <div
-            *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8]"
-            class="category-item skeleton-item"
-          >
-            <div class="skeleton cat-icon-skeleton"></div>
-            <div class="skeleton cat-name-skeleton"></div>
-          </div>
-        } @else {
-          <a
-            *ngFor="let cat of categories()"
-            [routerLink]="['/category', cat.slug]"
-            class="category-item"
-          >
-            <div class="cat-icon-wrap">
-              <span class="material-icons" *ngIf="!cat.icon"
-                >local_pharmacy</span
-              >
-              <img *ngIf="cat.icon" [src]="cat.icon" [alt]="cat.name" />
-            </div>
-            <span class="cat-name">{{ cat.name }}</span>
-          </a>
-        }
+    <div class="container relative">
+      <h2 class="section-title text-dark">Danh mục tủ thuốc</h2>
+      <div class="category-grid-wrap relative">
+        <button
+          class="nav-arrow nav-left"
+          (click)="scrollCarousel(categoryCarousel, 'left')"
+        >
+          <span class="material-icons">chevron_left</span>
+        </button>
+        <div class="category-grid hide-scroll" #categoryCarousel>
+          @if (loadingCategories()) {
+            @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
+              <div class="category-item skeleton-item">
+                <div class="skeleton cat-icon-skeleton"></div>
+                <div class="skeleton cat-name-skeleton"></div>
+              </div>
+            }
+          } @else {
+            @for (cat of categories(); track cat.id) {
+              <a [routerLink]="['/category', cat.slug]" class="category-item">
+                <div class="cat-icon-wrap">
+                  @if (!cat.icon) {
+                    <span class="material-icons">vaccines</span>
+                  } @else {
+                    <img [src]="cat.icon" [alt]="cat.name" />
+                  }
+                </div>
+                <span class="cat-name">{{ cat.name }}</span>
+              </a>
+            }
+          }
+        </div>
+        <button
+          class="nav-arrow nav-right"
+          (click)="scrollCarousel(categoryCarousel, 'right')"
+        >
+          <span class="material-icons">chevron_right</span>
+        </button>
       </div>
     </div>
   </section>
 
-  <!-- Hot Products (Sản phẩm bán chạy) -->
+  <!-- Banner Ưu đãi thả ga (From Screenshot 2) -->
+  <section class="mega-banner-section">
+    <div class="container">
+      <img
+        src="https://placehold.co/1200x300/F26522/FFF?text=UU+DAI+THA+GA"
+        alt="Ưu đãi thả ga"
+        class="mega-banner-img"
+      />
+    </div>
+  </section>
+
+  <!-- Section: Tủ thuốc chuẩn chăm sóc cả nhà -->
   <section class="product-section">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">
-          <span class="material-icons text-orange">local_fire_department</span>
-          Sản phẩm bán chạy
-        </h2>
-        <a routerLink="/category" class="view-all-btn">
-          Xem tất cả <span class="material-icons">chevron_right</span>
+        <h2 class="section-title text-dark">Tủ thuốc chuẩn chăm sóc cả nhà</h2>
+        <a routerLink="/category" class="view-all-link">
+          Xem tất cả <span class="material-icons">arrow_forward</span>
         </a>
       </div>
 
-      <div class="product-grid">
-        @if (loadingProducts()) {
-          <div
-            *ngFor="let i of [1, 2, 3, 4, 5]"
-            class="skeleton product-skeleton"
-          ></div>
-        } @else {
-          <app-product-card
-            *ngFor="let product of hotProducts()"
-            [product]="product"
-          ></app-product-card>
-        }
+      <div class="product-grid-wrap relative">
+        <button
+          class="nav-arrow nav-left"
+          (click)="scrollCarousel(hotProductsCarousel, 'left')"
+        >
+          <span class="material-icons">chevron_left</span>
+        </button>
+        <div class="product-carousel hide-scroll" #hotProductsCarousel>
+          @if (loadingProducts()) {
+            @for (i of [1, 2, 3, 4, 5]; track i) {
+              <div class="skeleton product-skeleton"></div>
+            }
+          } @else {
+            @for (product of hotProducts(); track product.id) {
+              <app-product-card
+                [product]="product"
+                style="flex: 0 0 220px; min-width: 220px; display: block"
+              ></app-product-card>
+            }
+          }
+        </div>
+        <button
+          class="nav-arrow nav-right"
+          (click)="scrollCarousel(hotProductsCarousel, 'right')"
+        >
+          <span class="material-icons">chevron_right</span>
+        </button>
       </div>
     </div>
   </section>
 
-  <!-- New Products -->
-  <section class="product-section alt-bg">
+  <!-- Section: Ưu đãi độc quyền -->
+  <section class="product-section bg-gray">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">
-          <span class="material-icons text-green">verified</span>
-          Sản phẩm mới
-        </h2>
-        <a routerLink="/category" class="view-all-btn">
-          Xem tất cả <span class="material-icons">chevron_right</span>
+        <h2 class="section-title text-dark">Ưu đãi độc quyền</h2>
+        <a routerLink="/category" class="view-all-link">
+          Xem tất cả <span class="material-icons">arrow_forward</span>
         </a>
       </div>
 
-      <div class="product-grid">
-        @if (loadingProducts()) {
-          <div
-            *ngFor="let i of [1, 2, 3, 4, 5]"
-            class="skeleton product-skeleton"
-          ></div>
-        } @else {
-          <app-product-card
-            *ngFor="let product of newProducts()"
-            [product]="product"
-          ></app-product-card>
-        }
+      <div class="product-grid-wrap relative">
+        <button
+          class="nav-arrow nav-left"
+          (click)="scrollCarousel(newProductsCarousel, 'left')"
+        >
+          <span class="material-icons">chevron_left</span>
+        </button>
+        <div class="product-carousel hide-scroll" #newProductsCarousel>
+          @if (loadingProducts()) {
+            @for (i of [1, 2, 3, 4, 5]; track i) {
+              <div class="skeleton product-skeleton"></div>
+            }
+          } @else {
+            @for (product of newProducts(); track product.id) {
+              <app-product-card
+                [product]="product"
+                style="flex: 0 0 220px; min-width: 220px; display: block"
+              ></app-product-card>
+            }
+          }
+        </div>
+        <button
+          class="nav-arrow nav-right"
+          (click)="scrollCarousel(newProductsCarousel, 'right')"
+        >
+          <span class="material-icons">chevron_right</span>
+        </button>
       </div>
     </div>
   </section>
@@ -240,21 +312,22 @@
           Thương hiệu nổi bật
         </h2>
         <div class="brand-grid">
-          <a
-            class="brand-item"
-            *ngFor="let brand of brands()"
-            [href]="brand.website_url || '#'"
-            target="_blank"
-            rel="noopener"
-          >
-            <img
-              [src]="brand.logo_url"
-              [alt]="brand.name"
-              onerror="
-                this.src = 'https://placehold.co/120x60/fff/ccc?text=Brand'
-              "
-            />
-          </a>
+          @for (brand of brands(); track brand.id) {
+            <a
+              class="brand-item"
+              [href]="brand.website_url || '#'"
+              target="_blank"
+              rel="noopener"
+            >
+              <img
+                [src]="brand.logo_url"
+                [alt]="brand.name"
+                onerror="
+                  this.src = 'https://placehold.co/120x60/fff/ccc?text=Brand'
+                "
+              />
+            </a>
+          }
         </div>
       </div>
     </section>

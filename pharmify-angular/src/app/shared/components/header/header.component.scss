@@ -158,10 +158,24 @@
 /* === Main Header === */
 .main-header {
   background: linear-gradient(180deg, #004d95 0%, #003a75 100%);
+  transition: all 0.3s ease;
+  z-index: 999;
+
+  &.is-sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    .container {
+      height: 64px;
+    }
+  }
 
   .container {
     height: 60px;
     gap: 16px;
+    transition: height 0.3s ease;
   }
 }
 
@@ -251,6 +265,58 @@
   }
 }
 
+/* Sticky Search Bar */
+.header-search-wrap {
+  flex: 1;
+  max-width: 500px;
+  margin-left: 8px;
+  animation: fadeInDown 0.3s ease;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header-search {
+  display: flex;
+  background: white;
+  border-radius: 20px;
+  height: 40px;
+  padding: 0 16px;
+  align-items: center;
+
+  input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+    color: var(--text-primary);
+  }
+
+  .search-icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0 4px;
+
+    .material-icons {
+      font-size: 22px;
+    }
+  }
+}
+
 .flex-spacer {
   flex: 1;
 }
@@ -332,6 +398,81 @@
 .user-name {
   font-size: 13px;
   font-weight: 600;
+}
+
+/* === User Dropdown === */
+.user-dropdown-wrap {
+  position: relative;
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  padding: 8px;
+  z-index: 9999;
+  animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  font-family: inherit;
+  transition: background 0.15s;
+
+  .material-icons {
+    font-size: 20px;
+    color: #666;
+  }
+
+  &:hover {
+    background: #f4f6f8;
+  }
+}
+
+.logout-btn {
+  color: #e53935;
+  .material-icons {
+    color: #e53935;
+  }
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #eee;
+  margin: 6px 8px;
+}
+
+button.user-action {
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
 }
 
 /* === Responsive === */

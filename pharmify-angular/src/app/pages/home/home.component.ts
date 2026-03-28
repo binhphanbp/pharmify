@@ -3,10 +3,13 @@ import {
   OnInit,
   signal,
   CUSTOM_ELEMENTS_SCHEMA,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { HomeService } from '../../core/services/home.service';
+import { BannerService } from '../../core/services/banner.service';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import { Product } from '../../core/models/product.model';
 import { Category } from '../../core/models/category.model';
@@ -25,6 +28,8 @@ register();
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomeComponent implements OnInit {
+  @ViewChild('heroSwiper') heroSwiperRef!: ElementRef;
+
   // Data signals
   heroBanners = signal<Banner[]>([]);
   subBanners = signal<Banner[]>([]);
@@ -40,6 +45,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private homeService: HomeService,
+    private bannerService: BannerService,
     private router: Router,
   ) {}
 
@@ -47,19 +53,52 @@ export class HomeComponent implements OnInit {
     this.loadData();
   }
 
-  onSearchInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.value && input.value.length > 2) {
-      // Could implement debounced search later
+  onSearch(input: HTMLInputElement) {
+    if (input.value && input.value.trim().length > 0) {
+      this.router.navigate(['/search'], {
+        queryParams: { q: input.value.trim() },
+      });
     }
+  }
+
+  scrollCarousel(element: HTMLElement, direction: 'left' | 'right') {
+    const scrollAmount = 400;
+    if (direction === 'left') {
+      element.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else {
+      element.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  }
+
+  initSwiper() {
+    // Wait for Angular to render the slides, then initialize Swiper
+    setTimeout(() => {
+      const swiperEl = this.heroSwiperRef?.nativeElement;
+      if (swiperEl) {
+        Object.assign(swiperEl, {
+          slidesPerView: 1,
+          loop: true,
+          autoplay: { delay: 4000, disableOnInteraction: false },
+          pagination: { clickable: true },
+          navigation: true,
+        });
+        swiperEl.initialize();
+      }
+    }, 100);
   }
 
   async loadData() {
     try {
-      // Single RPC call replaces 6 separate API calls
-      const data = await this.homeService.getHomePageData();
+      // Load RPC data + hero banners in parallel
+      const [data, heroBanners] = await Promise.all([
+        this.homeService.getHomePageData(),
+        this.bannerService.getBannersByPosition('hero'),
+      ]);
 
-      this.heroBanners.set(data.hero_banners);
+      // Use direct query for hero banners (RPC may return incomplete)
+      this.heroBanners.set(
+        heroBanners.length > 0 ? heroBanners : data.hero_banners,
+      );
       this.subBanners.set(data.sub_banners);
       this.brands.set(data.brands);
       this.categories.set(data.categories);
@@ -71,6 +110,9 @@ export class HomeComponent implements OnInit {
       this.loadingBanners.set(false);
       this.loadingCategories.set(false);
       this.loadingProducts.set(false);
+
+      // Initialize Swiper after data is loaded and view updates
+      this.initSwiper();
     }
   }
 }

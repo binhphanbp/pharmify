@@ -1,0 +1,156 @@
+<!-- Modal Overlay -->
+<div class="modal-overlay" (click)="onOverlayClick($event)">
+  <div class="modal-container">
+    <!-- Close Button -->
+    <button class="modal-close" (click)="closeModal()">
+      <span class="material-icons">close</span>
+    </button>
+
+    <!-- LOGIN MODE -->
+    @if (isLoginMode()) {
+      <div class="modal-body">
+        <h2 class="modal-title">XIN CHÀO,</h2>
+        <p class="modal-subtitle">Đăng nhập để tiếp tục mua sắm</p>
+
+        @if (errorMessage()) {
+          <div class="alert alert-error">
+            <span class="material-icons">error_outline</span>
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <form (ngSubmit)="onLogin()" class="auth-form">
+          <div class="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              placeholder="Nhập email của bạn"
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Mật khẩu</label>
+            <input
+              type="password"
+              name="password"
+              [(ngModel)]="password"
+              placeholder="Nhập mật khẩu"
+              autocomplete="current-password"
+            />
+          </div>
+
+          <button type="submit" class="btn-primary" [disabled]="loading()">
+            @if (loading()) {
+              <span class="material-icons spin">autorenew</span>
+              Đang xử lý...
+            } @else {
+              Đăng nhập
+            }
+          </button>
+        </form>
+
+        <div class="divider">
+          <span>Hoặc</span>
+        </div>
+
+        <button class="btn-google" disabled>
+          <img
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+            alt="Google"
+            width="20"
+            height="20"
+          />
+          Tiếp tục với Google
+        </button>
+
+        <p class="switch-mode">
+          Chưa có tài khoản?
+          <button (click)="switchToRegister()">Đăng ký ngay</button>
+        </p>
+      </div>
+    } @else {
+      <!-- REGISTER MODE -->
+      <div class="modal-body">
+        <h2 class="modal-title">ĐĂNG KÝ</h2>
+        <p class="modal-subtitle">Tạo tài khoản mới để mua sắm</p>
+
+        @if (errorMessage()) {
+          <div class="alert alert-error">
+            <span class="material-icons">error_outline</span>
+            {{ errorMessage() }}
+          </div>
+        }
+
+        @if (successMessage()) {
+          <div class="alert alert-success">
+            <span class="material-icons">check_circle</span>
+            {{ successMessage() }}
+          </div>
+        }
+
+        <form (ngSubmit)="onRegister()" class="auth-form">
+          <div class="form-group">
+            <label>Họ và tên</label>
+            <input
+              type="text"
+              name="fullName"
+              [(ngModel)]="fullName"
+              placeholder="Nhập họ và tên"
+              autocomplete="name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Số điện thoại</label>
+            <input
+              type="tel"
+              name="phone"
+              [(ngModel)]="phone"
+              placeholder="Nhập số điện thoại"
+              autocomplete="tel"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              name="regEmail"
+              [(ngModel)]="regEmail"
+              placeholder="Nhập email của bạn"
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Mật khẩu</label>
+            <input
+              type="password"
+              name="regPassword"
+              [(ngModel)]="regPassword"
+              placeholder="Nhập mật khẩu"
+              autocomplete="new-password"
+            />
+          </div>
+
+          <button type="submit" class="btn-primary" [disabled]="loading()">
+            @if (loading()) {
+              <span class="material-icons spin">autorenew</span>
+              Đang xử lý...
+            } @else {
+              Đăng ký
+            }
+          </button>
+        </form>
+
+        <p class="switch-mode">
+          Đã có tài khoản?
+          <button (click)="switchToLogin()">Đăng nhập</button>
+        </p>
+      </div>
+    }
+  </div>
+</div>

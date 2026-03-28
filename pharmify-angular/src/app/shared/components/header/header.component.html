@@ -47,7 +47,7 @@
   </div>
 
   <!-- Main Header Bar -->
-  <div class="main-header">
+  <div class="main-header" [class.is-sticky]="isSticky || !isHomePage">
     <div class="container d-flex align-items-center">
       <!-- Logo -->
       <a routerLink="/" class="logo">
@@ -63,7 +63,7 @@
       </a>
 
       <!-- Nav Links -->
-      <nav class="header-nav">
+      <nav class="header-nav" *ngIf="isHomePage && !isSticky">
         <a routerLink="/category/thuoc" class="nav-link-item">Thuốc</a>
         <a routerLink="/category/thuc-pham-chuc-nang" class="nav-link-item"
           >Thực phẩm bảo vệ sức khỏe</a
@@ -76,15 +76,26 @@
         >
       </nav>
 
+      <!-- Sticky Search Bar -->
+      <div class="header-search-wrap" *ngIf="!isHomePage || isSticky">
+        <div class="header-search">
+          <input
+            #headerSearch
+            type="text"
+            placeholder="Bạn đang tìm gì hôm nay..."
+            (keydown.enter)="onSearch(headerSearch, $event)"
+          />
+          <button class="search-icon-btn" (click)="onSearch(headerSearch)">
+            <span class="material-icons">search</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Spacer -->
       <div class="flex-spacer"></div>
 
       <!-- Right Actions -->
       <div class="header-actions">
-        <a href="#" class="action-icon-btn" title="Thông báo">
-          <span class="material-icons">notifications_none</span>
-        </a>
-
         <a
           routerLink="/cart"
           class="action-icon-btn cart-action"
@@ -96,24 +107,69 @@
           }
         </a>
 
+        <a href="#" class="action-icon-btn" title="Thông báo">
+          <span class="material-icons">notifications_none</span>
+        </a>
+
         @if (user()) {
-          <a routerLink="/account" class="user-action">
-            <span class="material-icons">person</span>
-            <div class="user-info">
-              <span class="user-greeting">Xin Chào</span>
-              <span class="user-name">{{ user()?.email || "Tài khoản" }}</span>
-            </div>
-          </a>
+          <div class="user-dropdown-wrap">
+            <button class="user-action" (click)="toggleUserMenu()">
+              <span class="material-icons">person</span>
+              <div class="user-info">
+                <span class="user-greeting">Xin Chào</span>
+                <span class="user-name">{{
+                  user()?.user_metadata?.["full_name"] || "Tài khoản"
+                }}</span>
+              </div>
+            </button>
+            @if (showUserMenu) {
+              <div class="user-dropdown-menu">
+                <a
+                  routerLink="/account"
+                  class="dropdown-item"
+                  (click)="showUserMenu = false"
+                >
+                  <span class="material-icons">person_outline</span> Tài khoản
+                </a>
+                <a
+                  routerLink="/orders"
+                  class="dropdown-item"
+                  (click)="showUserMenu = false"
+                >
+                  <span class="material-icons">receipt_long</span> Đơn hàng
+                </a>
+                @if (authService.isAdmin()) {
+                  <a
+                    routerLink="/admin"
+                    class="dropdown-item"
+                    (click)="showUserMenu = false"
+                  >
+                    <span class="material-icons">admin_panel_settings</span>
+                    Quản trị
+                  </a>
+                }
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item logout-btn" (click)="logout()">
+                  <span class="material-icons">logout</span> Đăng xuất
+                </button>
+              </div>
+            }
+          </div>
         } @else {
-          <a routerLink="/auth" class="user-action">
+          <button class="user-action" (click)="openAuthModal()">
             <span class="material-icons">person_outline</span>
             <div class="user-info">
               <span class="user-greeting">Xin Chào</span>
               <span class="user-name">Đăng nhập</span>
             </div>
-          </a>
+          </button>
         }
       </div>
     </div>
   </div>
 </header>
+
+<!-- Auth Modal -->
+@if (showAuthModal) {
+  <app-auth-modal (close)="closeAuthModal()"></app-auth-modal>
+}

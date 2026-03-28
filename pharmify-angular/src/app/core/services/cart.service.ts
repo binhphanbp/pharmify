@@ -40,14 +40,17 @@ export class CartService {
 
   addToCart(productId: string, unitId: string, quantity: number = 1) {
     const items = [...this.itemsSignal()];
-    const existing = items.find(
+    const existingIndex = items.findIndex(
       (i) => i.product_id === productId && i.unit_id === unitId,
     );
 
-    if (existing) {
+    if (existingIndex >= 0) {
+      // Move to front and update quantity
+      const [existing] = items.splice(existingIndex, 1);
       existing.quantity += quantity;
+      items.unshift(existing);
     } else {
-      items.push({ product_id: productId, unit_id: unitId, quantity });
+      items.unshift({ product_id: productId, unit_id: unitId, quantity });
     }
     this.saveCart(items);
   }

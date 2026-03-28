@@ -209,8 +209,8 @@ export class AdminBannersComponent implements OnInit {
 
   async loadBanners() {
     const [hero, sub] = await Promise.all([
-      this.bannerService.getBannersByPosition('hero'),
-      this.bannerService.getBannersByPosition('sub'),
+      this.bannerService.getAllBannersByPosition('hero'),
+      this.bannerService.getAllBannersByPosition('sub'),
     ]);
     this.heroBanners.set(hero);
     this.subBanners.set(sub);

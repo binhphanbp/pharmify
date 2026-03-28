@@ -31,7 +31,7 @@ import { SupabaseService } from '../../../core/services/supabase.service';
           <option value="pending">Chờ xử lý</option>
           <option value="confirmed">Đã xác nhận</option>
           <option value="shipping">Đang giao</option>
-          <option value="delivered">Đã giao</option>
+          <option value="completed">Hoàn thành</option>
           <option value="cancelled">Đã hủy</option>
         </select>
         <input
@@ -58,7 +58,9 @@ import { SupabaseService } from '../../../core/services/supabase.service';
           <tbody>
             <tr *ngFor="let o of filteredOrders()">
               <td>
-                <strong>#{{ o.id?.substring(0, 8) }}</strong>
+                <strong>{{
+                  o.order_number || '#' + o.id?.substring(0, 8)
+                }}</strong>
               </td>
               <td>
                 {{ o.customer_name || o.customer_email || 'Khách vãng lai' }}
@@ -71,7 +73,9 @@ import { SupabaseService } from '../../../core/services/supabase.service';
                   getStatusLabel(o.status)
                 }}</span>
               </td>
-              <td>{{ o.created_at | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                {{ o.ordered_at || o.created_at | date: 'dd/MM/yyyy HH:mm' }}
+              </td>
               <td class="actions">
                 <button
                   class="btn-icon edit"
@@ -88,7 +92,7 @@ import { SupabaseService } from '../../../core/services/supabase.service';
                   <option value="pending">Chờ xử lý</option>
                   <option value="confirmed">Xác nhận</option>
                   <option value="shipping">Đang giao</option>
-                  <option value="delivered">Đã giao</option>
+                  <option value="completed">Hoàn thành</option>
                   <option value="cancelled">Hủy</option>
                 </select>
               </td>
@@ -108,7 +112,13 @@ import { SupabaseService } from '../../../core/services/supabase.service';
       >
         <div class="modal" (click)="$event.stopPropagation()">
           <div class="modal-header">
-            <h3>Chi tiết đơn hàng #{{ selectedOrder.id?.substring(0, 8) }}</h3>
+            <h3>
+              Chi tiết đơn hàng
+              {{
+                selectedOrder.order_number ||
+                  '#' + selectedOrder.id?.substring(0, 8)
+              }}
+            </h3>
             <button class="btn-close" (click)="selectedOrder = null">
               <span class="material-icons">close</span>
             </button>
@@ -140,7 +150,7 @@ import { SupabaseService } from '../../../core/services/supabase.service';
               </div>
               <div class="detail-row">
                 <span class="label">Ghi chú:</span>
-                <span>{{ selectedOrder.note || '—' }}</span>
+                <span>{{ selectedOrder.notes || '—' }}</span>
               </div>
             </div>
 
@@ -197,7 +207,7 @@ export class AdminOrdersComponent implements OnInit {
     const { data } = await this.supabase.client
       .from('orders')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('ordered_at', { ascending: false });
     this.orders.set(data || []);
     this.filteredOrders.set(data || []);
     this.pendingCount.set(
@@ -216,6 +226,7 @@ export class AdminOrdersComponent implements OnInit {
       const term = this.searchTerm.toLowerCase();
       result = result.filter(
         (o) =>
+          o.order_number?.toLowerCase().includes(term) ||
           o.id?.includes(term) ||
           o.customer_name?.toLowerCase().includes(term) ||
           o.customer_email?.toLowerCase().includes(term),
@@ -229,7 +240,7 @@ export class AdminOrdersComponent implements OnInit {
       pending: 'Chờ xử lý',
       confirmed: 'Đã xác nhận',
       shipping: 'Đang giao',
-      delivered: 'Đã giao',
+      completed: 'Hoàn thành',
       cancelled: 'Đã hủy',
     };
     return map[status] || status;

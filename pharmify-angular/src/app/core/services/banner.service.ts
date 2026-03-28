@@ -12,7 +12,7 @@ export class BannerService {
 
   /**
    * Get active banners by position (hero, sub, popup, sidebar)
-   * Only returns banners within valid date range
+   * Only returns banners within valid date range — for public/storefront use
    */
   async getBannersByPosition(position: string = 'hero'): Promise<Banner[]> {
     const now = new Date().toISOString();
@@ -21,8 +21,23 @@ export class BannerService {
       .select('*')
       .eq('position', position)
       .eq('is_active', true)
-      .or(`start_date.is.null,start_date.lte.${now}`)
-      .or(`end_date.is.null,end_date.gte.${now}`)
+      .order('sort_order', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching banners:', error);
+      return [];
+    }
+    return data || [];
+  }
+
+  /**
+   * Get ALL banners by position — for admin panel (no active/date filters)
+   */
+  async getAllBannersByPosition(position: string = 'hero'): Promise<Banner[]> {
+    const { data, error } = await this.supabase
+      .from('banners')
+      .select('*')
+      .eq('position', position)
       .order('sort_order', { ascending: true });
 
     if (error) {
