@@ -1,0 +1,374 @@
+/* ===== Flash Sale Section — Pharmacity Style ===== */
+
+.flash-sale-section {
+  padding: 0 0 30px;
+  background: #fff4f0;
+}
+
+/* ===== Time Slot Tabs ===== */
+.slot-tabs {
+  display: flex;
+  gap: 0;
+  background: white;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.slot-tab {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  transition: all 0.2s;
+  position: relative;
+
+  &:hover {
+    background: #fef6f4;
+  }
+
+  &.active {
+    background: #fff4f0;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #ff6b35;
+    }
+  }
+
+  .slot-time {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ff6b35;
+    margin-bottom: 2px;
+  }
+
+  .slot-status {
+    display: block;
+    font-size: 12px;
+    color: #999;
+
+    &.status-active {
+      color: #e53935;
+      font-weight: 600;
+    }
+  }
+}
+
+/* ===== Flash Header: Title + Countdown ===== */
+.flash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 12px;
+}
+
+.flash-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.flash-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #333;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Countdown Timer */
+.countdown {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cd-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #333;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cd-sep {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.view-all-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--primary-blue, #0072bc);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+
+  .material-icons {
+    font-size: 18px;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ===== Category Pills ===== */
+.category-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+}
+
+.pill {
+  padding: 6px 16px;
+  border: 1.5px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    border-color: #ff6b35;
+    color: #ff6b35;
+  }
+
+  &.active {
+    border-color: #ff6b35;
+    background: #ff6b35;
+    color: white;
+    font-weight: 600;
+  }
+}
+
+/* ===== Product Carousel ===== */
+.flash-products-wrap {
+  position: relative;
+}
+
+.flash-carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 4px 0 8px;
+
+  &.hide-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid #e0e0e0;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+
+  &:hover {
+    background: #f0f0f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &.nav-left {
+    left: -18px;
+  }
+  &.nav-right {
+    right: -18px;
+  }
+}
+
+/* ===== Flash Product Card ===== */
+.flash-card-wrap {
+  flex: 0 0 200px;
+  min-width: 200px;
+}
+
+.flash-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+  border-radius: 12px;
+  border: 1.5px solid #f0e8e5;
+  overflow: hidden;
+  text-decoration: none;
+  transition: all 0.3s;
+  position: relative;
+
+  &:hover {
+    border-color: #ff6b35;
+    box-shadow: 0 8px 24px rgba(255, 107, 53, 0.12);
+    transform: translateY(-3px);
+
+    .flash-img {
+      transform: scale(1.04);
+    }
+  }
+}
+
+.flash-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #e53935;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 16px;
+  z-index: 2;
+  line-height: 1;
+}
+
+.flash-img-wrap {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  min-height: 150px;
+  overflow: hidden;
+}
+
+.flash-img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transition: transform 0.4s ease;
+}
+
+.flash-info {
+  padding: 10px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.flash-name {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #333;
+  margin: 0 0 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flash-price-row {
+  display: flex;
+  align-items: baseline;
+}
+
+.flash-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #e53935;
+}
+
+.flash-unit {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e53935;
+}
+
+.flash-old-price {
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+  margin-top: 1px;
+}
+
+/* ===== Sold Progress Bar ===== */
+.sold-bar-wrap {
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.sold-bar {
+  width: 100%;
+  height: 6px;
+  background: #ffe5e5;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.sold-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b35, #e53935);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.sold-text {
+  display: block;
+  font-size: 11px;
+  color: #e53935;
+  font-weight: 600;
+  margin-top: 4px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .slot-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .slot-tab {
+    min-width: 150px;
+  }
+
+  .flash-title {
+    font-size: 18px;
+  }
+
+  .flash-card-wrap {
+    flex: 0 0 170px;
+    min-width: 170px;
+  }
+}

@@ -11,6 +11,7 @@ import { RouterModule, Router } from '@angular/router';
 import { HomeService } from '../../core/services/home.service';
 import { BannerService } from '../../core/services/banner.service';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
+import { FlashSaleComponent } from '../../shared/components/flash-sale/flash-sale.component';
 import { Product } from '../../core/models/product.model';
 import { Category } from '../../core/models/category.model';
 import { Banner, Brand } from '../../core/models/banner.model';
@@ -22,7 +23,12 @@ register();
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, ProductCardComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ProductCardComponent,
+    FlashSaleComponent,
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

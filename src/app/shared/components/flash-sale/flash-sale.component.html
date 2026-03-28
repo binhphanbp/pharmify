@@ -1,0 +1,146 @@
+@if (!loading() && allItems().length > 0) {
+  <section class="flash-sale-section">
+    <div class="container">
+      <!-- Time Slot Tabs -->
+      <div class="slot-tabs">
+        @for (tab of slotTabs(); track tab.id) {
+          <button
+            class="slot-tab"
+            [class.active]="tab.id === selectedSlotId()"
+            (click)="selectSlot(tab.id)"
+          >
+            <span class="slot-time">{{ tab.timeRange }}</span>
+            <span
+              class="slot-status"
+              [class.status-active]="tab.status === 'active'"
+            >
+              {{ getSlotStatus(tab) }}
+            </span>
+          </button>
+        }
+      </div>
+
+      <!-- Flash Sale Header: Title + Countdown -->
+      <div class="flash-header">
+        <div class="flash-title-row">
+          <h2 class="flash-title">Flash Sale</h2>
+          <div class="countdown">
+            <span class="cd-box">{{ countdownHours() }}</span>
+            <span class="cd-sep">:</span>
+            <span class="cd-box">{{ countdownMinutes() }}</span>
+            <span class="cd-sep">:</span>
+            <span class="cd-box">{{ countdownSeconds() }}</span>
+          </div>
+        </div>
+        <a routerLink="/flash-sale" class="view-all-link">
+          Xem tất cả <span class="material-icons">arrow_forward</span>
+        </a>
+      </div>
+
+      <!-- Category Filter Pills -->
+      @if (categories().length > 1) {
+        <div class="category-pills">
+          <button
+            class="pill"
+            [class.active]="selectedCategoryId() === null"
+            (click)="selectCategory(null)"
+          >
+            Tất cả
+          </button>
+          @for (cat of categories(); track cat.id) {
+            <button
+              class="pill"
+              [class.active]="selectedCategoryId() === cat.id"
+              (click)="selectCategory(cat.id)"
+            >
+              {{ cat.name }}
+            </button>
+          }
+        </div>
+      }
+
+      <!-- Flash Products Carousel -->
+      <div class="flash-products-wrap">
+        <button
+          class="nav-arrow nav-left"
+          (click)="scrollCarousel(flashCarousel, 'left')"
+        >
+          <span class="material-icons">chevron_left</span>
+        </button>
+
+        <div class="flash-carousel hide-scroll" #flashCarousel>
+          @for (item of filteredItems(); track item.item_id) {
+            <div class="flash-card-wrap">
+              <a
+                [routerLink]="['/product', item.product_slug]"
+                class="flash-card"
+              >
+                <!-- Discount Badge -->
+                @if (item.discount_percent > 0) {
+                  <span class="flash-badge"
+                    >Giảm {{ item.discount_percent }}%</span
+                  >
+                }
+
+                <!-- Image -->
+                <div class="flash-img-wrap">
+                  <img
+                    [src]="item.product_image || ''"
+                    [alt]="item.product_name"
+                    class="flash-img"
+                    onerror="
+                      this.src =
+                        'https://placehold.co/200x200/f8f9fa/ccc?text=Pharmify'
+                    "
+                  />
+                </div>
+
+                <!-- Info -->
+                <div class="flash-info">
+                  <h3 class="flash-name">{{ item.product_name }}</h3>
+
+                  <div class="flash-price-row">
+                    <span class="flash-price"
+                      >{{ item.flash_price | number: "1.0-0" }} đ</span
+                    >
+                    <span class="flash-unit">/{{ item.unit_name }}</span>
+                  </div>
+
+                  @if (item.original_price > item.flash_price) {
+                    <span class="flash-old-price"
+                      >{{ item.original_price | number: "1.0-0" }} đ</span
+                    >
+                  }
+
+                  <!-- Sold Progress Bar -->
+                  <div class="sold-bar-wrap">
+                    <div class="sold-bar">
+                      <div
+                        class="sold-fill"
+                        [style.width.%]="getSoldPercent(item)"
+                      ></div>
+                    </div>
+                    <span class="sold-text">
+                      @if (getSoldPercent(item) >= 70) {
+                        🔥 Đang bán chạy
+                      } @else {
+                        Đã bán {{ item.sold_count }}/{{ item.stock_limit }}
+                      }
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          }
+        </div>
+
+        <button
+          class="nav-arrow nav-right"
+          (click)="scrollCarousel(flashCarousel, 'right')"
+        >
+          <span class="material-icons">chevron_right</span>
+        </button>
+      </div>
+    </div>
+  </section>
+}
