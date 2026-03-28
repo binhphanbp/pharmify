@@ -86,6 +86,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'flash-sale',
+        loadComponent: () =>
+          import('./pages/admin/flash-sale/flash-sale.component').then(
+            (m) => m.AdminFlashSaleComponent,
+          ),
+      },
+      {
         path: 'orders',
         loadComponent: () =>
           import('./pages/admin/orders/orders.component').then(

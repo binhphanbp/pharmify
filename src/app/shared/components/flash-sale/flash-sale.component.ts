@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, signal, computed } from '@angular/core';
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
   FlashSaleService,
@@ -17,7 +17,7 @@ interface SlotTab {
 @Component({
   selector: 'app-flash-sale',
   standalone: true,
-  imports: [CommonModule, RouterModule, DecimalPipe],
+  imports: [CommonModule, RouterModule],
   templateUrl: './flash-sale.component.html',
   styleUrls: ['./flash-sale.component.scss'],
 })
@@ -42,7 +42,8 @@ export class FlashSaleComponent implements OnInit, OnDestroy {
       if (!map.has(item.time_slot_id)) {
         const start = new Date(item.start_time);
         const end = new Date(item.end_time);
-        const timeRange = `00:00 - 23:59, ${item.slot_label}`;
+        const pad = (n: number) => n.toString().padStart(2, '0');
+        const timeRange = `${pad(start.getHours())}:${pad(start.getMinutes())} - ${pad(end.getHours())}:${pad(end.getMinutes())}, ${item.slot_label}`;
         map.set(item.time_slot_id, {
           id: item.time_slot_id,
           label: item.slot_label,

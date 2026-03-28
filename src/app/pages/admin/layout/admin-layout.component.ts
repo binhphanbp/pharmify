@@ -71,6 +71,14 @@ import { AuthService } from '../../../core/services/auth.service';
             <span class="nav-text" *ngIf="!sidebarCollapsed">Thương hiệu</span>
           </a>
           <a
+            routerLink="/admin/flash-sale"
+            routerLinkActive="active"
+            class="nav-item"
+          >
+            <span class="material-icons">flash_on</span>
+            <span class="nav-text" *ngIf="!sidebarCollapsed">Flash Sale</span>
+          </a>
+          <a
             routerLink="/admin/orders"
             routerLinkActive="active"
             class="nav-item"

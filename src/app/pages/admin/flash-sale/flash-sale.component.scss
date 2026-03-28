@@ -1,0 +1,231 @@
+@use "../products/products.component.scss";
+
+/* ===== Flash Sale Admin Styles ===== */
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  background: white;
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.tab {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+
+  .material-icons {
+    font-size: 18px;
+  }
+
+  &.active {
+    background: #ff6b35;
+    color: white;
+  }
+  &:hover:not(.active) {
+    background: #fff4f0;
+    color: #ff6b35;
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+/* ===== Data Table ===== */
+.data-table {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  th {
+    background: #fafafa;
+    font-weight: 600;
+    color: #555;
+    font-size: 12px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  td strong {
+    color: #333;
+  }
+
+  tbody tr:hover {
+    background: #fef9f7;
+  }
+}
+
+.actions-cell {
+  display: flex;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+/* ===== Badges ===== */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &.active {
+    background: #e6f7e6;
+    color: #389e0d;
+  }
+  &.upcoming {
+    background: #fff7e6;
+    color: #d48806;
+  }
+  &.inactive {
+    background: #f5f5f5;
+    color: #999;
+  }
+}
+
+.discount-badge {
+  display: inline-block;
+  background: #fff1f0;
+  color: #cf1322;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* ===== Prices ===== */
+.price-flash {
+  color: #e53935;
+  font-weight: 700;
+}
+
+.price-original {
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* ===== Progress Bar ===== */
+.progress-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b35, #e53935);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.progress-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #e53935;
+  white-space: nowrap;
+}
+
+/* ===== Filter Row ===== */
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  background: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    white-space: nowrap;
+  }
+
+  select {
+    flex: 1;
+    max-width: 400px;
+  }
+}
+
+/* ===== Discount Preview ===== */
+.discount-preview {
+  background: #fff1f0;
+  color: #cf1322;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* ===== Active Toggle Button ===== */
+.btn-icon.active-toggle {
+  color: #389e0d;
+  &:hover {
+    background: #e6f7e6;
+  }
+}
+
+/* ===== Modal Wide ===== */
+.modal-wide {
+  max-width: 640px !important;
+}
+
+/* Preview Image */
+.preview-img {
+  margin-top: 8px;
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
