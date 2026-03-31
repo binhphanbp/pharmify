@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { CartService } from '../../core/services/cart.service';
 import { ProductDetail, ProductUnit } from '../../core/models/product.model';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-product-detail',
@@ -116,7 +117,9 @@ export class ProductDetailComponent implements OnInit {
     const u = this.selectedUnitId();
     if (p && u) {
       this.cartService.addToCart(p.id, u, this.quantity());
-      alert('Đã thêm sản phẩm vào giỏ hàng');
+      toast.success('Đã thêm sản phẩm vào giỏ hàng', {
+        description: `${p.name} × ${this.quantity()}`,
+      });
     }
   }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
+import { toast } from 'ngx-sonner';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/services/supabase.service';
@@ -707,7 +708,7 @@ export class AdminFlashSaleComponent implements OnInit {
       this.showCampaignForm = false;
       await this.loadCampaigns();
     } catch (err) {
-      alert('Lỗi khi lưu chiến dịch');
+      toast.error('Lỗi khi lưu chiến dịch');
     } finally {
       this.saving.set(false);
     }
@@ -783,7 +784,7 @@ export class AdminFlashSaleComponent implements OnInit {
       this.showSlotForm = false;
       await this.loadSlots();
     } catch (err) {
-      alert('Lỗi khi lưu khung giờ');
+      toast.error('Lỗi khi lưu khung giờ');
     } finally {
       this.saving.set(false);
     }
@@ -866,7 +867,7 @@ export class AdminFlashSaleComponent implements OnInit {
       this.showItemForm = false;
       await this.loadItems();
     } catch (err) {
-      alert('Lỗi khi lưu sản phẩm Flash Sale');
+      toast.error('Lỗi khi lưu sản phẩm Flash Sale');
     } finally {
       this.saving.set(false);
     }

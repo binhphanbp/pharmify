@@ -1,0 +1,505 @@
+.search-page {
+  min-height: calc(100vh - 200px);
+  background: #f5f7fa;
+  padding: 24px 0 60px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== Search Header ===== */
+.search-header {
+  margin-bottom: 24px;
+}
+
+.search-input-wrap {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+
+  &:focus-within {
+    border-color: #0072bc;
+    box-shadow: 0 4px 20px rgba(0, 114, 188, 0.12);
+  }
+
+  .search-icon {
+    padding: 0 4px 0 16px;
+    color: #999;
+    font-size: 22px;
+  }
+
+  input {
+    flex: 1;
+    padding: 14px 12px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    font-family: inherit;
+    color: #333;
+
+    &::placeholder {
+      color: #aaa;
+    }
+  }
+
+  .search-btn {
+    padding: 12px 28px;
+    background: #0072bc;
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    margin: 4px;
+    border-radius: 8px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #005a96;
+    }
+  }
+}
+
+/* ===== Empty State ===== */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+
+  .empty-icon {
+    font-size: 64px;
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 22px;
+    color: #333;
+    margin: 0 0 8px;
+  }
+
+  p {
+    color: #888;
+    font-size: 15px;
+    margin: 0 0 28px;
+  }
+}
+
+/* ===== Popular Tags ===== */
+.popular-tags {
+  .tag-label {
+    display: block;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  &.compact {
+    margin-top: 20px;
+    .tag-label {
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.tag-btn {
+  padding: 8px 18px;
+  background: #f0f5ff;
+  color: #0072bc;
+  border: 1px solid #d6e4ff;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #0072bc;
+    color: white;
+    border-color: #0072bc;
+  }
+}
+
+/* ===== Results Header ===== */
+.results-header {
+  margin-bottom: 16px;
+
+  h2 {
+    font-size: 16px;
+    color: #555;
+    font-weight: 400;
+    margin: 0;
+
+    strong {
+      color: #0072bc;
+      font-weight: 600;
+    }
+  }
+
+  .result-count {
+    font-size: 13px;
+    color: #888;
+    margin-left: 8px;
+    font-weight: 500;
+  }
+}
+
+.results-info {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* ===== Toolbar ===== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-select,
+.sort-select {
+  padding: 8px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  background: white;
+  cursor: pointer;
+  color: #333;
+  min-width: 160px;
+
+  &:focus {
+    border-color: #0072bc;
+    outline: none;
+  }
+}
+
+.sort-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sort-label {
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.price-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.price-input {
+  width: 100px;
+  padding: 8px 10px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+
+  &:focus {
+    border-color: #0072bc;
+    outline: none;
+  }
+
+  &::placeholder {
+    color: #bbb;
+  }
+}
+
+.price-sep {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.apply-price-btn,
+.clear-price-btn {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .material-icons {
+    font-size: 18px;
+    color: #666;
+  }
+
+  &:hover {
+    border-color: #0072bc;
+    .material-icons {
+      color: #0072bc;
+    }
+  }
+}
+
+.clear-price-btn {
+  border-color: #ffa39e;
+  .material-icons {
+    color: #cf1322;
+  }
+  &:hover {
+    background: #fff2f0;
+  }
+}
+
+/* ===== Active Filters ===== */
+.active-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  flex-wrap: wrap;
+
+  .active-label {
+    font-size: 13px;
+    color: #888;
+    font-weight: 500;
+  }
+}
+
+.filter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: #e6f7ff;
+  color: #0072bc;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+
+  button {
+    background: none;
+    border: none;
+    color: #0072bc;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    font-weight: 700;
+
+    &:hover {
+      color: #005a96;
+    }
+  }
+}
+
+.clear-all-btn {
+  padding: 4px 12px;
+  background: none;
+  border: 1px solid #d9d9d9;
+  border-radius: 16px;
+  font-size: 12px;
+  color: #888;
+  cursor: pointer;
+  font-family: inherit;
+
+  &:hover {
+    border-color: #cf1322;
+    color: #cf1322;
+  }
+}
+
+/* ===== Results Grid ===== */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+
+  .grid-item {
+    display: block;
+  }
+}
+
+/* ===== Loading Skeleton ===== */
+.loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.skeleton-card {
+  height: 320px;
+  background: linear-gradient(110deg, #f0f0f0 8%, #fafafa 18%, #f0f0f0 33%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+  border-radius: 12px;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ===== No Results ===== */
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+
+  .no-result-icon {
+    font-size: 56px;
+    color: #ccc;
+    margin-bottom: 12px;
+  }
+
+  h3 {
+    font-size: 18px;
+    color: #333;
+    margin: 0 0 8px;
+  }
+
+  p {
+    color: #888;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+/* ===== Load More ===== */
+.load-more {
+  text-align: center;
+  padding: 30px 0;
+}
+
+.load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 32px;
+  background: white;
+  color: #0072bc;
+  border: 2px solid #0072bc;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  .material-icons {
+    font-size: 20px;
+  }
+
+  &:hover {
+    background: #0072bc;
+    color: white;
+  }
+}
+
+/* ===== Loading More ===== */
+.loading-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 30px 0;
+  color: #888;
+  font-size: 14px;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #0072bc;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group {
+    flex-direction: column;
+  }
+
+  .price-filter {
+    width: 100%;
+  }
+
+  .price-input {
+    flex: 1;
+  }
+
+  .results-grid,
+  .loading-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .search-input-wrap input {
+    font-size: 14px;
+    padding: 12px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .results-grid,
+  .loading-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+}

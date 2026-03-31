@@ -3,6 +3,24 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/services/supabase.service';
 
+const STATUS_MAP: Record<string, string> = {
+  pending: 'Chờ xử lý',
+  confirmed: 'Đã xác nhận',
+  shipping: 'Đang giao hàng',
+  completed: 'Hoàn thành',
+  cancelled: 'Đã hủy',
+};
+
+const STATUS_ICON: Record<string, string> = {
+  pending: 'hourglass_top',
+  confirmed: 'check_circle',
+  shipping: 'local_shipping',
+  completed: 'verified',
+  cancelled: 'cancel',
+};
+
+const STATUS_FLOW = ['pending', 'confirmed', 'shipping', 'completed'];
+
 @Component({
   selector: 'app-admin-orders',
   standalone: true,
@@ -10,14 +28,31 @@ import { SupabaseService } from '../../../core/services/supabase.service';
   template: `
     <div class="admin-page">
       <div class="page-header">
-        <h2>Quản lý đơn hàng</h2>
+        <h2>
+          <span
+            class="material-icons"
+            style="color: #1890ff; vertical-align: middle"
+            >receipt_long</span
+          >
+          Quản lý đơn hàng
+        </h2>
         <div class="order-stats">
-          <span class="stat-badge pending"
-            >Chờ xử lý: {{ pendingCount() }}</span
-          >
-          <span class="stat-badge confirmed"
-            >Đã xác nhận: {{ confirmedCount() }}</span
-          >
+          <span class="stat-badge pending">
+            <span class="material-icons">hourglass_top</span>
+            Chờ xử lý: {{ pendingCount() }}
+          </span>
+          <span class="stat-badge confirmed">
+            <span class="material-icons">check_circle</span>
+            Đã xác nhận: {{ confirmedCount() }}
+          </span>
+          <span class="stat-badge shipping">
+            <span class="material-icons">local_shipping</span>
+            Đang giao: {{ shippingCount() }}
+          </span>
+          <span class="stat-badge completed">
+            <span class="material-icons">verified</span>
+            Hoàn thành: {{ completedCount() }}
+          </span>
         </div>
       </div>
 
@@ -69,9 +104,12 @@ import { SupabaseService } from '../../../core/services/supabase.service';
                 {{ o.total_amount | currency: 'VND' : 'symbol' : '1.0-0' }}
               </td>
               <td>
-                <span class="order-status" [attr.data-status]="o.status">{{
-                  getStatusLabel(o.status)
-                }}</span>
+                <span class="order-status" [attr.data-status]="o.status">
+                  <span class="material-icons">{{
+                    getStatusIcon(o.status)
+                  }}</span>
+                  {{ getStatusLabel(o.status) }}
+                </span>
               </td>
               <td>
                 {{ o.ordered_at || o.created_at | date: 'dd/MM/yyyy HH:mm' }}
@@ -87,13 +125,13 @@ import { SupabaseService } from '../../../core/services/supabase.service';
                 <select
                   class="status-select"
                   [ngModel]="o.status"
-                  (ngModelChange)="updateStatus(o.id, $event)"
+                  (ngModelChange)="onTableStatusChange(o, $event)"
                 >
-                  <option value="pending">Chờ xử lý</option>
-                  <option value="confirmed">Xác nhận</option>
-                  <option value="shipping">Đang giao</option>
-                  <option value="completed">Hoàn thành</option>
-                  <option value="cancelled">Hủy</option>
+                  <option value="pending">⏳ Chờ xử lý</option>
+                  <option value="confirmed">✅ Xác nhận</option>
+                  <option value="shipping">🚚 Đang giao</option>
+                  <option value="completed">✔️ Hoàn thành</option>
+                  <option value="cancelled">❌ Hủy</option>
                 </select>
               </td>
             </tr>
@@ -104,10 +142,57 @@ import { SupabaseService } from '../../../core/services/supabase.service';
         </p>
       </div>
 
+      <!-- Confirmation Dialog (custom, replaces window.confirm) -->
+      <div
+        class="modal-overlay confirm-overlay"
+        *ngIf="confirmData"
+        (click)="cancelConfirm()"
+      >
+        <div class="confirm-dialog" (click)="$event.stopPropagation()">
+          <div class="confirm-icon">
+            <span
+              class="material-icons"
+              [attr.data-status]="confirmData.newStatus"
+            >
+              {{ getStatusIcon(confirmData.newStatus) }}
+            </span>
+          </div>
+          <h3>Xác nhận thay đổi trạng thái</h3>
+          <p>
+            Đơn hàng <strong>{{ confirmData.orderNumber }}</strong
+            ><br />
+            <span
+              class="order-status inline"
+              [attr.data-status]="confirmData.oldStatus"
+            >
+              {{ getStatusLabel(confirmData.oldStatus) }}
+            </span>
+            <span class="material-icons arrow-icon">arrow_forward</span>
+            <span
+              class="order-status inline"
+              [attr.data-status]="confirmData.newStatus"
+            >
+              {{ getStatusLabel(confirmData.newStatus) }}
+            </span>
+          </p>
+          <div class="confirm-actions">
+            <button class="btn-cancel" (click)="cancelConfirm()">Hủy</button>
+            <button
+              class="btn-confirm"
+              [attr.data-status]="confirmData.newStatus"
+              (click)="executeConfirm()"
+              [disabled]="saving()"
+            >
+              {{ saving() ? 'Đang cập nhật...' : 'Xác nhận' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Order Detail Modal -->
       <div
         class="modal-overlay"
-        *ngIf="selectedOrder"
+        *ngIf="selectedOrder && !confirmData"
         (click)="selectedOrder = null"
       >
         <div class="modal" (click)="$event.stopPropagation()">
@@ -124,6 +209,36 @@ import { SupabaseService } from '../../../core/services/supabase.service';
             </button>
           </div>
           <div class="modal-body">
+            <!-- Status Flow -->
+            <div
+              class="status-flow"
+              *ngIf="selectedOrder.status !== 'cancelled'"
+            >
+              <ng-container *ngFor="let step of statusFlow; let i = index">
+                <span
+                  class="flow-step"
+                  [class.active]="selectedOrder.status === step"
+                  [class.done]="getStepIndex(selectedOrder.status) > i"
+                  [attr.data-status]="step"
+                >
+                  <span class="material-icons">{{ getStatusIcon(step) }}</span>
+                  {{ getStatusLabel(step) }}
+                </span>
+                <span class="flow-arrow" *ngIf="i < statusFlow.length - 1">
+                  <span class="material-icons">chevron_right</span>
+                </span>
+              </ng-container>
+            </div>
+            <div
+              class="status-flow"
+              *ngIf="selectedOrder.status === 'cancelled'"
+            >
+              <span class="flow-step active" data-status="cancelled">
+                <span class="material-icons">cancel</span>
+                Đã hủy
+              </span>
+            </div>
+
             <div class="order-detail-info">
               <div class="detail-row">
                 <span class="label">Khách hàng:</span>
@@ -180,8 +295,42 @@ import { SupabaseService } from '../../../core/services/supabase.service';
                 </tr>
               </tbody>
             </table>
+            <p class="empty-text" *ngIf="orderItems().length === 0">
+              Không có sản phẩm
+            </p>
+
+            <!-- Status Change in Modal -->
+            <div class="status-row">
+              <span class="label">Cập nhật trạng thái:</span>
+              <select class="status-select-modal" [(ngModel)]="modalNewStatus">
+                <option value="pending">⏳ Chờ xử lý</option>
+                <option value="confirmed">✅ Đã xác nhận</option>
+                <option value="shipping">🚚 Đang giao hàng</option>
+                <option value="completed">✔️ Hoàn thành</option>
+                <option value="cancelled">❌ Đã hủy</option>
+              </select>
+              <button
+                class="btn-save-status"
+                (click)="onModalStatusChange()"
+                [disabled]="saving() || modalNewStatus === selectedOrder.status"
+              >
+                {{ saving() ? 'Đang lưu...' : 'Cập nhật' }}
+              </button>
+            </div>
           </div>
         </div>
+      </div>
+
+      <!-- Toast notification -->
+      <div
+        class="toast"
+        *ngIf="toastMsg()"
+        [class.error]="toastType() === 'error'"
+      >
+        <span class="material-icons">{{
+          toastType() === 'error' ? 'error' : 'check_circle'
+        }}</span>
+        {{ toastMsg() }}
       </div>
     </div>
   `,
@@ -191,11 +340,29 @@ export class AdminOrdersComponent implements OnInit {
   orders = signal<any[]>([]);
   filteredOrders = signal<any[]>([]);
   orderItems = signal<any[]>([]);
+  saving = signal(false);
+
   pendingCount = signal(0);
   confirmedCount = signal(0);
+  shippingCount = signal(0);
+  completedCount = signal(0);
+
+  toastMsg = signal('');
+  toastType = signal<'success' | 'error'>('success');
+
   selectedOrder: any = null;
+  modalNewStatus = '';
   filterStatus = '';
   searchTerm = '';
+  confirmData: {
+    orderId: string;
+    orderNumber: string;
+    oldStatus: string;
+    newStatus: string;
+    fromModal: boolean;
+  } | null = null;
+
+  statusFlow = STATUS_FLOW;
 
   constructor(private supabase: SupabaseService) {}
 
@@ -208,14 +375,20 @@ export class AdminOrdersComponent implements OnInit {
       .from('orders')
       .select('*')
       .order('ordered_at', { ascending: false });
-    this.orders.set(data || []);
-    this.filteredOrders.set(data || []);
-    this.pendingCount.set(
-      (data || []).filter((o: any) => o.status === 'pending').length,
-    );
+
+    const d = data || [];
+    this.orders.set(d);
+    this.pendingCount.set(d.filter((o: any) => o.status === 'pending').length);
     this.confirmedCount.set(
-      (data || []).filter((o: any) => o.status === 'confirmed').length,
+      d.filter((o: any) => o.status === 'confirmed').length,
     );
+    this.shippingCount.set(
+      d.filter((o: any) => o.status === 'shipping').length,
+    );
+    this.completedCount.set(
+      d.filter((o: any) => o.status === 'completed').length,
+    );
+    this.filterOrders();
   }
 
   filterOrders() {
@@ -236,30 +409,110 @@ export class AdminOrdersComponent implements OnInit {
   }
 
   getStatusLabel(status: string): string {
-    const map: Record<string, string> = {
-      pending: 'Chờ xử lý',
-      confirmed: 'Đã xác nhận',
-      shipping: 'Đang giao',
-      completed: 'Hoàn thành',
-      cancelled: 'Đã hủy',
-    };
-    return map[status] || status;
+    return STATUS_MAP[status] || status;
+  }
+
+  getStatusIcon(status: string): string {
+    return STATUS_ICON[status] || 'help';
+  }
+
+  getStepIndex(status: string): number {
+    return STATUS_FLOW.indexOf(status);
   }
 
   async viewOrder(order: any) {
     this.selectedOrder = order;
+    this.modalNewStatus = order.status;
     const { data } = await this.supabase.client
       .from('order_items')
-      .select('*')
+      .select('*, products(name)')
       .eq('order_id', order.id);
-    this.orderItems.set(data || []);
+
+    this.orderItems.set(
+      (data || []).map((item: any) => ({
+        ...item,
+        product_name:
+          item.products?.name || item.product_name || item.product_id,
+      })),
+    );
   }
 
-  async updateStatus(orderId: string, newStatus: string) {
-    await this.supabase.client
-      .from('orders')
-      .update({ status: newStatus })
-      .eq('id', orderId);
-    await this.loadOrders();
+  // --- Status change from table dropdown ---
+  onTableStatusChange(order: any, newStatus: string) {
+    if (newStatus === order.status) return;
+    this.confirmData = {
+      orderId: order.id,
+      orderNumber: order.order_number || '#' + order.id?.substring(0, 8),
+      oldStatus: order.status,
+      newStatus,
+      fromModal: false,
+    };
+  }
+
+  // --- Status change from detail modal ---
+  onModalStatusChange() {
+    if (
+      !this.selectedOrder ||
+      this.modalNewStatus === this.selectedOrder.status
+    )
+      return;
+    this.confirmData = {
+      orderId: this.selectedOrder.id,
+      orderNumber:
+        this.selectedOrder.order_number ||
+        '#' + this.selectedOrder.id?.substring(0, 8),
+      oldStatus: this.selectedOrder.status,
+      newStatus: this.modalNewStatus,
+      fromModal: true,
+    };
+  }
+
+  cancelConfirm() {
+    this.confirmData = null;
+    this.loadOrders(); // Reset the dropdown state
+  }
+
+  async executeConfirm() {
+    if (!this.confirmData) return;
+    const { orderId, newStatus, fromModal } = this.confirmData;
+
+    this.saving.set(true);
+    try {
+      const { data, error } = await this.supabase.client.rpc(
+        'fn_update_order_status',
+        {
+          p_order_id: orderId,
+          p_new_status: newStatus,
+        },
+      );
+
+      console.log('RPC response:', { data, error });
+
+      if (error) throw error;
+      if (data && !data.success) throw new Error(data.error || 'Unknown error');
+
+      // Update selectedOrder if from modal
+      if (fromModal && this.selectedOrder) {
+        this.selectedOrder = { ...this.selectedOrder, status: newStatus };
+        this.modalNewStatus = newStatus;
+      }
+
+      this.confirmData = null;
+      await this.loadOrders();
+      this.showToast('Cập nhật trạng thái thành công!', 'success');
+    } catch (err: any) {
+      console.error('Status update error:', err);
+      this.showToast('Lỗi: ' + (err?.message || 'Không thể cập nhật'), 'error');
+      this.confirmData = null;
+      await this.loadOrders();
+    } finally {
+      this.saving.set(false);
+    }
+  }
+
+  private showToast(msg: string, type: 'success' | 'error') {
+    this.toastMsg.set(msg);
+    this.toastType.set(type);
+    setTimeout(() => this.toastMsg.set(''), 3000);
   }
 }

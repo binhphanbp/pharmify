@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { toast } from 'ngx-sonner';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BannerService } from '../../../core/services/banner.service';
@@ -282,7 +283,7 @@ export class AdminBannersComponent implements OnInit {
       await this.loadBanners();
     } catch (err) {
       console.error('Error saving banner:', err);
-      alert('Lỗi khi lưu banner');
+      toast.error('Lỗi khi lưu banner');
     } finally {
       this.saving.set(false);
     }
@@ -294,7 +295,7 @@ export class AdminBannersComponent implements OnInit {
       await this.bannerService.deleteBanner(id);
       await this.loadBanners();
     } catch (err) {
-      alert('Lỗi khi xóa banner');
+      toast.error('Lỗi khi xóa banner');
     }
   }
 }

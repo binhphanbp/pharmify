@@ -1,0 +1,192 @@
+<div class="search-page">
+  <div class="container">
+    <!-- Search Header -->
+    <div class="search-header">
+      <div class="search-input-wrap">
+        <span class="material-icons search-icon">search</span>
+        <input
+          type="text"
+          [value]="query"
+          (input)="onSearchInput($event)"
+          (keydown.enter)="submitSearch()"
+          placeholder="Tìm kiếm thuốc, thực phẩm chức năng..."
+          autofocus
+        />
+        <button class="search-btn" (click)="submitSearch()">Tìm kiếm</button>
+      </div>
+    </div>
+
+    <!-- No query state -->
+    <div class="empty-state" *ngIf="!query">
+      <span class="material-icons empty-icon">manage_search</span>
+      <h3>Bạn đang tìm gì hôm nay?</h3>
+      <p>Nhập từ khóa để tìm kiếm sản phẩm</p>
+      <div class="popular-tags">
+        <span class="tag-label">Tìm kiếm phổ biến:</span>
+        <div class="tags-wrap">
+          <button
+            *ngFor="let tag of popularSearches"
+            class="tag-btn"
+            (click)="searchTag(tag)"
+          >
+            {{ tag }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Results Area -->
+    <div class="search-content" *ngIf="query">
+      <!-- Results Header -->
+      <div class="results-header">
+        <div class="results-info">
+          <h2>
+            Kết quả tìm kiếm cho "<strong>{{ query }}</strong
+            >"
+          </h2>
+          <span class="result-count" *ngIf="!loading()">
+            {{ totalCount() }} sản phẩm
+          </span>
+        </div>
+      </div>
+
+      <!-- Filters & Sort -->
+      <div class="toolbar">
+        <div class="filter-group">
+          <select
+            [(ngModel)]="selectedCategory"
+            (change)="onFilterChange()"
+            class="filter-select"
+          >
+            <option value="">Tất cả danh mục</option>
+            <option *ngFor="let cat of categories()" [value]="cat.slug">
+              {{ cat.name }}
+            </option>
+          </select>
+
+          <div class="price-filter">
+            <input
+              type="number"
+              [(ngModel)]="priceMin"
+              placeholder="Giá từ"
+              class="price-input"
+            />
+            <span class="price-sep">–</span>
+            <input
+              type="number"
+              [(ngModel)]="priceMax"
+              placeholder="Giá đến"
+              class="price-input"
+            />
+            <button class="apply-price-btn" (click)="applyPriceFilter()">
+              <span class="material-icons">filter_alt</span>
+            </button>
+            <button
+              class="clear-price-btn"
+              *ngIf="priceMin || priceMax"
+              (click)="clearPriceFilter()"
+            >
+              <span class="material-icons">close</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sort-group">
+          <span class="sort-label">Sắp xếp:</span>
+          <select
+            [(ngModel)]="sortBy"
+            (change)="onSortChange()"
+            class="sort-select"
+          >
+            <option value="relevance">Liên quan nhất</option>
+            <option value="price_asc">Giá thấp → cao</option>
+            <option value="price_desc">Giá cao → thấp</option>
+            <option value="newest">Mới nhất</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Active Filters Tags -->
+      <div
+        class="active-filters"
+        *ngIf="
+          selectedCategory || priceMin || priceMax || sortBy !== 'relevance'
+        "
+      >
+        <span class="active-label">Bộ lọc:</span>
+        <span class="filter-tag" *ngIf="selectedCategory">
+          {{ selectedCategory }}
+          <button (click)="selectedCategory = ''; onFilterChange()">×</button>
+        </span>
+        <span class="filter-tag" *ngIf="priceMin || priceMax">
+          {{ priceMin || 0 | number }}đ – {{ priceMax || "∞" }}đ
+          <button (click)="clearPriceFilter()">×</button>
+        </span>
+        <span class="filter-tag" *ngIf="sortBy !== 'relevance'">
+          {{
+            sortBy === "price_asc"
+              ? "Giá ↑"
+              : sortBy === "price_desc"
+                ? "Giá ↓"
+                : "Mới nhất"
+          }}
+          <button (click)="sortBy = 'relevance'; onSortChange()">×</button>
+        </span>
+        <button class="clear-all-btn" (click)="clearAll()">Xóa tất cả</button>
+      </div>
+
+      <!-- Loading -->
+      <div class="loading-grid" *ngIf="loading() && page === 1">
+        <div
+          class="skeleton-card"
+          *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8]"
+        ></div>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="results-grid" *ngIf="!loading() || page > 1">
+        <app-product-card
+          *ngFor="let product of results()"
+          [product]="product"
+          class="grid-item"
+        ></app-product-card>
+      </div>
+
+      <!-- No Results -->
+      <div
+        class="no-results"
+        *ngIf="!loading() && results().length === 0 && query"
+      >
+        <span class="material-icons no-result-icon">search_off</span>
+        <h3>Không tìm thấy sản phẩm nào</h3>
+        <p>Thử tìm kiếm với từ khóa khác hoặc bỏ bớt bộ lọc</p>
+        <div class="popular-tags compact">
+          <span class="tag-label">Gợi ý:</span>
+          <div class="tags-wrap">
+            <button
+              *ngFor="let tag of popularSearches.slice(0, 4)"
+              class="tag-btn"
+              (click)="searchTag(tag)"
+            >
+              {{ tag }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Load More -->
+      <div class="load-more" *ngIf="hasMore() && !loading()">
+        <button class="load-more-btn" (click)="loadMore()">
+          <span class="material-icons">expand_more</span>
+          Xem thêm sản phẩm
+        </button>
+      </div>
+
+      <!-- Loading More -->
+      <div class="loading-more" *ngIf="loading() && page > 1">
+        <div class="spinner"></div>
+        <span>Đang tải thêm...</span>
+      </div>
+    </div>
+  </div>
+</div>

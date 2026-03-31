@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { toast } from 'ngx-sonner';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/services/supabase.service';
@@ -473,7 +474,7 @@ export class AdminProductsComponent implements OnInit {
           });
         if (uploadError) {
           console.error('Upload error:', uploadError);
-          alert('Lỗi tải ảnh: ' + uploadError.message);
+          toast.error('Lỗi tải ảnh', { description: uploadError.message });
           this.saving.set(false);
           return;
         }
@@ -510,7 +511,7 @@ export class AdminProductsComponent implements OnInit {
           .eq('id', this.editingId);
         if (error) {
           console.error('Update error:', error);
-          alert('Lỗi cập nhật sản phẩm: ' + error.message);
+          toast.error('Lỗi cập nhật sản phẩm', { description: error.message });
           this.saving.set(false);
           return;
         }
@@ -522,7 +523,7 @@ export class AdminProductsComponent implements OnInit {
           .single();
         if (error) {
           console.error('Insert error:', error);
-          alert('Lỗi thêm sản phẩm: ' + error.message);
+          toast.error('Lỗi thêm sản phẩm', { description: error.message });
           this.saving.set(false);
           return;
         }
@@ -536,7 +537,7 @@ export class AdminProductsComponent implements OnInit {
       await this.loadData();
     } catch (err) {
       console.error('Error saving product:', err);
-      alert('Lỗi khi lưu sản phẩm');
+      toast.error('Lỗi khi lưu sản phẩm');
     } finally {
       this.saving.set(false);
     }

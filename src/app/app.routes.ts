@@ -29,6 +29,11 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'search',
+    loadComponent: () =>
+      import('./pages/search/search.component').then((m) => m.SearchComponent),
+  },
+  {
     path: 'cart',
     loadComponent: () =>
       import('./pages/cart/cart.component').then((m) => m.CartComponent),

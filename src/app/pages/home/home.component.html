@@ -160,11 +160,7 @@
             @for (cat of categories(); track cat.id) {
               <a [routerLink]="['/category', cat.slug]" class="category-item">
                 <div class="cat-icon-wrap">
-                  @if (!cat.icon) {
-                    <span class="material-icons">vaccines</span>
-                  } @else {
-                    <img [src]="cat.icon" [alt]="cat.name" />
-                  }
+                  <span class="material-icons">{{ cat.icon }}</span>
                 </div>
                 <span class="cat-name">{{ cat.name }}</span>
               </a>
@@ -178,17 +174,6 @@
           <span class="material-icons">chevron_right</span>
         </button>
       </div>
-    </div>
-  </section>
-
-  <!-- Banner Ưu đãi thả ga (From Screenshot 2) -->
-  <section class="mega-banner-section">
-    <div class="container">
-      <img
-        src="https://placehold.co/1200x300/F26522/FFF?text=UU+DAI+THA+GA"
-        alt="Ưu đãi thả ga"
-        class="mega-banner-img"
-      />
     </div>
   </section>
 
@@ -234,7 +219,7 @@
   </section>
 
   <!-- Section: Ưu đãi độc quyền -->
-  <section class="product-section bg-gray">
+  <section class="product-section">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title text-dark">Ưu đãi độc quyền</h2>

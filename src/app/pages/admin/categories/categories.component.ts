@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { toast } from 'ngx-sonner';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/services/supabase.service';
@@ -191,7 +192,7 @@ export class AdminCategoriesComponent implements OnInit {
       this.showForm = false;
       await this.loadCategories();
     } catch (err) {
-      alert('Lỗi khi lưu danh mục');
+      toast.error('Lỗi khi lưu danh mục');
     } finally {
       this.saving.set(false);
     }

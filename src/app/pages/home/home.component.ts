@@ -16,6 +16,25 @@ import { Product } from '../../core/models/product.model';
 import { Category } from '../../core/models/category.model';
 import { Banner, Brand } from '../../core/models/banner.model';
 
+const CATEGORY_ICONS: Record<string, string> = {
+  'thuoc-giam-dau-ha-sot': 'medication',
+  'vitamin-khoang-chat': 'spa',
+  'thuoc-ho-cam-cum': 'sick',
+  'thuoc-tieu-hoa': 'masks',
+  'cham-soc-da': 'face',
+  'san-pham-me-be': 'child_care',
+  'thiet-bi-y-te': 'bloodtype',
+  'thuoc-khang-sinh': 'healing',
+  'thuoc-tim-mach': 'favorite',
+  'thuoc-than-kinh': 'psychology',
+  'thuoc-mat-tai-mui': 'visibility',
+  'cham-soc-ca-nhan': 'clean_hands',
+  'thuc-pham-chuc-nang': 'local_pharmacy',
+  'thuoc-da-lieu': 'sanitizer',
+  'thuoc-duong-huyet': 'water_drop',
+  'dung-cu-y-te': 'medical_services',
+};
+
 // Register swiper web components
 import { register } from 'swiper/element/bundle';
 register();
@@ -167,7 +186,14 @@ export class HomeComponent implements OnInit {
       );
       this.subBanners.set(data.sub_banners);
       this.brands.set(data.brands);
-      this.categories.set(data.categories);
+
+      // Map icons to categories
+      const categoriesWithIcons = data.categories.map((cat) => ({
+        ...cat,
+        icon: CATEGORY_ICONS[cat.slug] || 'vaccines',
+      }));
+      this.categories.set(categoriesWithIcons);
+
       this.hotProducts.set(data.hot_products);
       this.newProducts.set(data.new_products);
     } catch (err) {
